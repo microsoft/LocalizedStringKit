@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		DDF2F98D23DF3FA400B7E8E9 /* LocalizedStringKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF2F98323DF3FA400B7E8E9 /* LocalizedStringKit.framework */; };
-		DDF2F99223DF3FA400B7E8E9 /* LocalizedStringKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF2F99123DF3FA400B7E8E9 /* LocalizedStringKitTests.m */; };
 		DDF2F99423DF3FA400B7E8E9 /* LocalizedStringKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DDF2F98623DF3FA400B7E8E9 /* LocalizedStringKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDF2F99E23DF401600B7E8E9 /* LocalizedStringKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF2F99D23DF401600B7E8E9 /* LocalizedStringKit.m */; };
 		DDF2F9A323DF413400B7E8E9 /* LocalizedStringKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF2F9A223DF413400B7E8E9 /* LocalizedStringKitTests.swift */; };
@@ -29,10 +28,8 @@
 		DDF2F98623DF3FA400B7E8E9 /* LocalizedStringKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizedStringKit.h; sourceTree = "<group>"; };
 		DDF2F98723DF3FA400B7E8E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDF2F98C23DF3FA400B7E8E9 /* LocalizedStringKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocalizedStringKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDF2F99123DF3FA400B7E8E9 /* LocalizedStringKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizedStringKitTests.m; sourceTree = "<group>"; };
 		DDF2F99323DF3FA400B7E8E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDF2F99D23DF401600B7E8E9 /* LocalizedStringKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalizedStringKit.m; sourceTree = "<group>"; };
-		DDF2F99F23DF412500B7E8E9 /* LocalizedStringKitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LocalizedStringKitTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDF2F9A223DF413400B7E8E9 /* LocalizedStringKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedStringKitTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,9 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				DDF2F9A223DF413400B7E8E9 /* LocalizedStringKitTests.swift */,
-				DDF2F99123DF3FA400B7E8E9 /* LocalizedStringKitTests.m */,
 				DDF2F99323DF3FA400B7E8E9 /* Info.plist */,
-				DDF2F99F23DF412500B7E8E9 /* LocalizedStringKitTests-Bridging-Header.h */,
 			);
 			path = LocalizedStringKitTests;
 			sourceTree = "<group>";
@@ -214,7 +209,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDF2F99223DF3FA400B7E8E9 /* LocalizedStringKitTests.m in Sources */,
 				DDF2F9A323DF413400B7E8E9 /* LocalizedStringKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,7 +406,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.Office.Outlook.LocalizedStringKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "LocalizedStringKitTests/LocalizedStringKitTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -432,7 +425,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.Office.Outlook.LocalizedStringKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "LocalizedStringKitTests/LocalizedStringKitTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
