@@ -78,8 +78,8 @@
 		DDF2F98523DF3FA400B7E8E9 /* LocalizedStringKit */ = {
 			isa = PBXGroup;
 			children = (
-				DDF2F99D23DF401600B7E8E9 /* LocalizedStringKit.m */,
 				DDF2F98623DF3FA400B7E8E9 /* LocalizedStringKit.h */,
+				DDF2F99D23DF401600B7E8E9 /* LocalizedStringKit.m */,
 				DDF2F98723DF3FA400B7E8E9 /* Info.plist */,
 			);
 			path = LocalizedStringKit;
