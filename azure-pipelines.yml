@@ -1,0 +1,59 @@
+
+jobs:
+
+    - job: 'Build and Test Generation Tool'
+      pool: 'Hosted macOS'
+      strategy:
+        matrix:
+          Python37:
+            python.version: '3.7'
+        maxParallel: 4
+    
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          architecture: 'x64'
+    
+      - script: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+        displayName: Install Poetry
+    
+      - script: python -m venv $(System.DefaultWorkingDirectory)
+        displayName: Create virtual environment
+    
+      - script: |
+          source bin/activate
+          $HOME/.poetry/bin/poetry install
+        displayName: 'Install dependencies'
+    
+      - script: |
+          source bin/activate
+          python -m black -l 100 --check localizedstringkit/*.py tests/*.py
+        displayName: 'Format Check (Black)'
+    
+      - script: |
+          source bin/activate
+          python -m pylint --rcfile=pylintrc localizedstringkit tests
+        displayName: 'Lint'
+    
+      - script: |
+          source bin/activate
+          python -m mypy --ignore-missing-imports localizedstringkit/ tests/
+        displayName: 'Type Check'
+    
+      - script: |
+          source bin/activate
+          python -m pytest tests --cov=localizedstringkit --cov-report xml --doctest-modules --junitxml=junit/test-results.xml
+        displayName: 'pytest'
+    
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFiles: '**/test-results.xml'
+          testRunTitle: 'Python $(python.version)'
+        condition: succeededOrFailed()
+    
+      # Publish Code Coverage Results
+      - task: PublishCodeCoverageResults@1
+        inputs:
+          codeCoverageTool: 'cobertura'
+          summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage.xml

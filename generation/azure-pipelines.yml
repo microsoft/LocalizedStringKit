@@ -1,0 +1,102 @@
+
+jobs:
+
+    - job: 'Build_and_Test_Library'
+      displayName: "Build and Test iOS Library"
+      pool: 'Hosted macOS'
+    
+      steps:
+
+      - script: |
+          ls -al /Applications/Xcode*
+          printenv
+        displayName: 'Environment'
+
+      - task: Xcode@5
+        displayName: 'Build'
+        inputs:
+          configuration: 'Release'
+          sdk: 'iphoneos13.2'
+          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit/LocalizedStringKit.xcodeproj'
+          scheme: 'LocalizedStringKit'
+          xcodeVersion: specifyPath
+          xcodeDeveloperDir: /Applications/Xcode_11.3.1.app
+
+      - task: Xcode@5
+        displayName: 'Test'
+        inputs:
+          actions: test
+          configuration: 'Debug'
+          sdk: 'iphoneos13.2'
+          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit/LocalizedStringKit.xcodeproj'
+          scheme: 'LocalizedStringKitTests'
+          xcodeVersion: specifyPath
+          xcodeDeveloperDir: /Applications/Xcode_11.3.1.app
+          signingOption: default
+          destinationPlatformOption: iOS
+          publishJUnitResults: true
+          destinationSimulators: 'iPhone 11'
+
+
+    - job: 'Build_and_Test_Tool'
+      displayName: "Build and Test Generation Tool"
+      pool: 'Hosted macOS'
+      strategy:
+        matrix:
+          Python37:
+            python.version: '3.7'
+        maxParallel: 4
+    
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          architecture: 'x64'
+    
+      - script: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+        displayName: Install Poetry
+
+      - script: python -m venv $(System.DefaultWorkingDirectory)
+        displayName: Create virtual environment
+
+      - script: |
+          source bin/activate
+          cd generation
+          $HOME/.poetry/bin/poetry install
+        displayName: 'Install dependencies'
+    
+      - script: |
+          source bin/activate
+          cd generation
+          python -m black -l 100 --check localizedstringkit/*.py tests/*.py
+        displayName: 'Format Check (Black)'
+    
+      - script: |
+          source bin/activate
+          cd generation
+          python -m pylint --rcfile=pylintrc localizedstringkit tests
+        displayName: 'Lint'
+    
+      - script: |
+          source bin/activate
+          cd generation
+          python -m mypy --ignore-missing-imports localizedstringkit/ tests/
+        displayName: 'Type Check'
+    
+      - script: |
+          source bin/activate
+          cd generation
+          python -m pytest tests --cov=localizedstringkit --cov-report xml --doctest-modules --junitxml=junit/test-results.xml
+        displayName: 'pytest'
+    
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFiles: '**/test-results.xml'
+          testRunTitle: 'Python $(python.version)'
+        condition: succeededOrFailed()
+    
+      # Publish Code Coverage Results
+      - task: PublishCodeCoverageResults@1
+        inputs:
+          codeCoverageTool: 'cobertura'
+          summaryFileLocation: $(System.DefaultWorkingDirectory)/generation/coverage.xml

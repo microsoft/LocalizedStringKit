@@ -1,0 +1,12 @@
+NSLocalizedStringWithDefaultValue(@"aed973dec3fe7b1c47b2de4d91a1d1bf", @"LocalizedStringKit", @"", @"Value", @"Comment");
+NSLocalizedStringWithDefaultValue(@"8ff922bbcd8ad41cdfc48d3c5163b2ab", @"LocalizedStringKit", @"", @"Calendar", @"The name of the calendar tab.");
+NSLocalizedStringWithDefaultValue(@"ce8ae9da5b7cd6c3df2929543a9af92d", @"LocalizedStringKit", @"", @"Email", @"Some email label");
+NSLocalizedStringWithDefaultValue(@"5ae3add0cc2ee480858a51acba191385", @"LocalizedStringKit", @"", @"Apple Watch App", @"The title of the what's new content for the new Apple Watch support.");
+NSLocalizedStringWithDefaultValue(@"0b77eb3d110df91a833b78cc4d70b7c6", @"LocalizedStringKit", @"", @"Clear through out Outlook inbox or calendar just by swiping up from the Watch face.", @"The body of the what's new content for the new Apple Watch support");
+NSLocalizedStringWithDefaultValue(@"1a046d9d3c6b1bfc2d78b3a3474767cc", @"LocalizedStringKit", @"", @"Send invitation to \"%@\"?", @"Prompt whether or not to send an invitation for event with subject name.");
+NSLocalizedStringWithDefaultValue(@"c54f099bf28f5e7bdf0597ec9ed4a47b", @"LocalizedStringKit", @"", @"Some string with a tricky \", @\" first parameter.", @"Comment");
+NSLocalizedStringWithDefaultValue(@"78386ec8f2845742c324a3d7d3e800ff", @"LocalizedStringKit", @"", @"People", @"Comment containing \") but the sentence continues.");
+NSLocalizedStringWithDefaultValue(@"f4f70727dc34561dfde1a3c529b6205c", @"LocalizedStringKit", @"", @"Settings", @"The name of the settings tab.");
+NSLocalizedStringWithDefaultValue(@"91f3a2c0e4424c87689525da44c4db11", @"LocalizedStringKit", @"", @"Files", @"The name of the files tab.");
+NSLocalizedStringWithDefaultValue(@"d3d2e617335f08df83599665eef8a418", @"LocalizedStringKit", @"", @"Close", @"The name of the close menu button.");
+NSLocalizedStringWithDefaultValue(@"c66ca1c7ea0b6321bd07e3f0880c906d", @"LocalizedStringKit", @"", @"First special token: \n and second special token: \"", @"This value contains some special tokens.");

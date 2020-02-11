@@ -18,7 +18,11 @@ And you are good to go.
 
 ### Application Library
 
-The app side of the tool is powered by the LocalizedStringKit library. This is a framework which can be easily added to your app via Carthage. Add this repo to your cart file, then link in the library with wherever you need to use it.
+The app side of the tool is powered by the LocalizedStringKit library.
+
+The recommended way of consuming this library is via [Carthage](https://github.com/Carthage/Carthage). The line to add to your `Cartfile` is: `github "Microsoft/localizedstringkit"`
+
+For any issues, refer to the Carthage documentation.
 
 ### Strings bundle
 
@@ -49,17 +53,17 @@ Remember to `import LocalizedStringKit` in the file too.
 
 ### Generate your strings
 
-Now everything is in place to generate the `.strings` files. For this, you'll need the tool we use to generate the strings files. This exists in the feed here: <https://office.visualstudio.com/Outlook%20Mobile/_packaging?_a=package&feed=olm-shared&package=localizedstringkit&protocolType=PyPI> If you are unfamiliar with installation, there is guidance on the feed page.
+Now everything is in place to generate the `.strings` files. For this, you'll need the tool we use to generate the strings files. It is a Python tool and can be installed by running `pip install localizedstringkit`.
 
-Once the tool is installed, you just need to run `generate_localizedstringkit -h` and it will show you how to call it. Here's an example:
+Once the tool is installed, you just need to run `localizedstringkit -h` and it will show you how to call it. Here's an example:
 
 ```bash
-generate_localizedstringkit \
+localizedstringkit \
 --path /path/to/my/project/root \
 --localized-string-kit-path /path/to/my/project/root/LocalizedStringKit
 ```
 
-This will scan `/path/to/my/project/root/` for all Swift and Objective-C files, extract any calls to `Localized` and generate the `en.lproj/LocalizedStringKit.strings` file. It will also generate a `source_strings.m` file as an intermediate step. This file is kept around as it allows the `generate_localizedstringkit --check` command to be run quickly. You can add it to your `.gitignore` if preferred.
+This will scan `/path/to/my/project/root/` for all Swift and Objective-C files, extract any calls to `Localized` and generate the `en.lproj/LocalizedStringKit.strings` file. It will also generate a `source_strings.m` file as an intermediate step. This file is kept around as it allows the `localizedstringkit --check` command to be run quickly. You can add it to your `.gitignore` if preferred.
 
 
 And that's it. You are now up and running with LocalizedStringKit.
@@ -72,8 +76,29 @@ We know that this tool is a little slow. Unfortunately there's little we can do 
 ### Can this be consumed as a library?
 Yes, absolutely. Just `import localizedstringkit`.
 
-### How to migrate existing strings
-There is no built in method to migrate existing strings, but it's relatively straightforward to do so. Follow the setup steps above first. Then convert all `NSLocalizedString` calls to `Localized` calls, replacing your manual key with the English string. Then run the generate script mentioned above.
+### How do I migrate existing strings?
+There is no built in method to migrate existing strings, but it's relatively straightforward to do so. Follow the setup steps above first. Then convert all `NSLocalizedString` calls to `Localized` calls, replacing your manual key with the English string. Then run the generate script mentioned above. You'll then need to move your translations through a similar process.
+
+### How are collisions handled?
+If you have two strings that are identical then they'll be "merged". By that, they'll share the same key, but the comments will be appended. The result will look something like this in the LocalizedStringKit.strings file:
+
+```
+/* Text on button which when tapped will send an email message to a user
+   Text on button which when tapped will send a message to the support team */
+"1432f32780bbd9cde496343b060fd75d" = "Send Message";
+```
+
+However, there will be cases where you don't want this to happen. For example, you may have the word `Schedule` appear as a heading for a screen which show's a users daily schedule, but is also a button which you can press to schedule a meeting. In one case the word is a noun and the other a verb. These will often be different words in other languages, so you want to ensure that they get unique translations. For this, you can use key extensions. For example:
+
+```swift
+// Heading
+title.text = LocalizedWithKeyExtension("Schedule", "Title for a screen which shows the users daily schedule", "Noun")
+
+// Button
+button.text = LocalizedWithKeyExtension("Schedule", "Text for a button which will schedule the meeting currently displayed on screen.", "Verb")
+```
+
+In this case the English string and the extension (in this case `Verb` or `Noun`) will be concatenated before hashing to generate the key, resulting in these two cases having different keys. The key extension can be any string you like.
 
 
 # Contributing

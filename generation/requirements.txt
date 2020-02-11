@@ -1,0 +1,2 @@
+deserialize==1.5.1
+dotstrings==0.13.0

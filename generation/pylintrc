@@ -1,0 +1,82 @@
+[MASTER]
+
+# Use multiple processes to speed up Pylint.
+jobs=4
+
+# Require full doc comments
+# Require the correct doc comment style
+# Avoid compare to empty string
+# Avoid overlapping exceptions
+# Limit cyclomatic complexity
+load-plugins=pylint.extensions.docparams,pylint.extensions.docstyle,pylint.extensions.emptystring,pylint.extensions.overlapping_exceptions,pylint.extensions.redefined_variable_type,pylint.extensions.mccabe
+
+# pylint.extensions.docparams options
+accept-no-param-doc=no
+accept-no-raise-doc=no
+accept-no-return-doc=no
+accept-no-yeilds-doc=no
+
+# pylint.extensions.mccabe options
+max-complexity=12
+
+[MESSAGES CONTROL]
+
+# C0330 bad-continuation: Wrong hanging indentation before block
+# C0413 wrong-import-position: Import “%s” should be placed at the top of the module Used when code and imports are mixed
+# C1801 len-as-condition: Do not use `len(SEQUENCE)` as condition value
+# W0511 fixme: TODO statements
+# W0703 broad-except: Catching too general exception "Exception"
+# W1201 logging-not-lazy: Specify string format arguments as logging function parameters
+# W1202 logging-format-interpolation: Use % formatting in logging functions and pass the % parameters as arguments
+# W1203 logging-fstring-interpolation: Use % formatting in logging functions and pass the % parameters as arguments
+disable=C0330,C0413,C1801,W0511,W0703,W1201,W1202,W1203
+
+[REPORTS]
+
+# Set the output format. Available formats are text, parseable, colorized, msvs
+# (visual studio) and html. You can also give a reporter class, eg
+# mypackage.mymodule.MyReporterClass.
+output-format=parseable
+
+[BASIC]
+
+# Good variable names which should always be accepted, separated by a comma
+good-names=f,i,j,k,ex,log,_,exposed,unit_test,T
+
+# Include a hint for the correct naming format with invalid-name
+include-naming-hint=yes
+
+# Methods and functions can have names up to 50 characters. We need this on
+# occasion for internal methods doing complex things.
+method-rgx=[a-z_][a-z0-9_]{2,50}$
+method-name-hint=[a-z_][a-z0-9_]{2,50}$
+function-rgx=[a-z_][a-z0-9_]{2,50}$
+fuction-name-hint=[a-z_][a-z0-9_]{2,50}$
+
+# Increase from 7. 7 isn't enough to encapsulate everything we need for working 
+# with various APIs.
+max-attributes=15
+
+[DESIGN]
+
+# Not everything needs to have methods. Python prefers named tuples over classes
+# but classes give more flexibility in the future.
+min-public-methods=0
+
+[FORMAT]
+
+# We should aim to stick below 120, but it's not always possible, and makes the 
+# code look uglier in a lot of cases
+max-line-length=200
+
+# 50 is a good number, but we need to break it on occasion. 75 is more than 
+# adequate
+max-statements=75
+
+
+# 5 is just too small, and I found I was frequently overriding to pass values
+# into constructors since there is no way to automatically filter those.
+max-args=8
+
+# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
+expected-line-ending-format=LF

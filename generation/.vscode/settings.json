@@ -1,0 +1,46 @@
+{
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        ".cache/": true,
+        "bin/": true,
+        "include/": true,
+        "junit/": true,
+        "lib/": true,
+    },
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "${workspaceFolder}/bin/black",
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "100"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyPath": "${workspaceFolder}/bin/mypy",
+    "python.linting.mypyArgs": [
+        "--config-file=${workspaceFolder}/mypy.ini"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintPath": "${workspaceFolder}/bin/pylint",
+    "python.linting.pylintArgs": [
+        "--rcfile=${workspaceFolder}/.pylintrc",
+        "--extension-pkg-whitelist=mypy",
+        "--init-hook",
+        "import sys; sys.path.insert(0, '${workspaceFolder}/localizedstringkit')"
+    ],
+    "python.pythonPath": "${workspaceFolder}/bin/python3",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ]
+}

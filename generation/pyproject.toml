@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "localizedstringkit"
+version = "0.1.0"
+description = "Generate .strings files directly from your code"
+authors = ["Dale Myers <dalemy@microsoft.com>"]
+license = "MIT"
+readme = 'README.md'
+
+repository = "https://github.com/microsoft/LocalizedStringKit"
+homepage = "https://github.com/microsoft/LocalizedStringKit"
+
+keywords = ['localization', 'strings', 'generation']
+
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.7',
+    'Topic :: Software Development',
+    'Topic :: Software Development :: Internationalization',
+    'Topic :: Utilities'
+]
+
+[tool.poetry.scripts]
+localizedstringkit = 'localizedstringkit:command_line.run'
+
+[tool.poetry.dependencies]
+python = "^3.7"
+dotstrings = "0.13.0"
+deserialize = "^1.5.0"
+
+[tool.poetry.dev-dependencies]
+black = "=19.10b0"
+mypy = "=0.761"
+pylint = "=2.4.4"
+pytest = "=5.3.5"
+pytest-cov = "=2.8.1"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
