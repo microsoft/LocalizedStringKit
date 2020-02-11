@@ -65,8 +65,9 @@ localizedstringkit \
 
 This will scan `/path/to/my/project/root/` for all Swift and Objective-C files, extract any calls to `Localized` and generate the `en.lproj/LocalizedStringKit.strings` file. It will also generate a `source_strings.m` file as an intermediate step. This file is kept around as it allows the `localizedstringkit --check` command to be run quickly. You can add it to your `.gitignore` if preferred.
 
-
 And that's it. You are now up and running with LocalizedStringKit.
+
+_Note: Remember that if you use Carthage for installation, you'll need to add `--exclude Carthage` (or whatever your path is) to the command to avoid the library itself being flagged._
 
 ## FAQ
 
