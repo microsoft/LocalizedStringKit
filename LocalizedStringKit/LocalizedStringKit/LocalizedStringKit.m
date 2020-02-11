@@ -12,20 +12,20 @@
 
 @implementation LocalizedStringKit
 
-NSString * _Nonnull Localized(NSString * _Nonnull value, NSString * _Nonnull comment) {
+NSString *Localized(NSString *value, NSString *comment) {
   return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil];
 }
 
-NSString * _Nonnull LocalizedWithKeyExtension(NSString * _Nonnull value, NSString * _Nonnull comment, NSString * _Nonnull keyExtension) {
+NSString *LocalizedWithKeyExtension(NSString *value, NSString *comment, NSString *keyExtension) {
   return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension];
 }
 
 __attribute__((annotate("returns_localized_nsstring")))
-NSString * _Nonnull LocalizationUnnecessary(NSString * _Nonnull value) {
+NSString *LocalizationUnnecessary(NSString *value) {
   return value;
 }
 
-NSBundle * _Nullable getLocalizedStringKitBundle() {
+NSBundle *getLocalizedStringKitBundle() {
   return [LocalizedStringKit getLocalizedStringKitBundle];
 }
 
