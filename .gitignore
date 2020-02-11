@@ -6,3 +6,4 @@ pyvenv.cfg
 **/*.egg-info/*
 generation/bin/*
 generation/dist
+.DS_Store
