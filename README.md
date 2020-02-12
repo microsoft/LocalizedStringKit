@@ -101,6 +101,15 @@ button.text = LocalizedWithKeyExtension("Schedule", "Text for a button which wil
 
 In this case the English string and the extension (in this case `Verb` or `Noun`) will be concatenated before hashing to generate the key, resulting in these two cases having different keys. The key extension can be any string you like.
 
+### Why is my app bigger after doing this?
+
+By default, `.strings` files are in the old OpenStep plist format. When you use the standard functionality through Xcode, it automatically converts these to binary plists on build. With the custom bundle of this process, that no longer happens automatically. However, to fix it, it is relatively straightforward. Simply add a new run script phase to your main apps build phases, and add the following line to it:
+
+```bash
+find "${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/LocalizedStringKit.bundle" -name "LocalizedStringKit.strings" -exec plutil -convert binary1 {} \;
+```
+
+On build, the files in your binary will now be compressed. 
 
 # Contributing
 
