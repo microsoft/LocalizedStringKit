@@ -46,7 +46,7 @@ ProjectName/
 In your source code, add some code like:
 
 ```swift
-label.text = LocalizedString("My new string", "A comment")
+label.text = Localized("My new string", "A comment")
 ```
 
 Remember to `import LocalizedStringKit` in the file too.
