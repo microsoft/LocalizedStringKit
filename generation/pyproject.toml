@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "localizedstringkit"
-version = "0.1.0"
+version = "0.1.4"
 description = "Generate .strings files directly from your code"
 authors = ["Dale Myers <dalemy@microsoft.com>"]
 license = "MIT"
@@ -27,7 +27,7 @@ localizedstringkit = 'localizedstringkit:command_line.run'
 
 [tool.poetry.dependencies]
 python = "^3.7"
-dotstrings = "0.13.0"
+dotstrings = "^1.0.0"
 deserialize = "^1.5.0"
 
 [tool.poetry.dev-dependencies]
