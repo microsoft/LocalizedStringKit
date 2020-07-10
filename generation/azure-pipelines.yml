@@ -17,7 +17,7 @@ jobs:
         inputs:
           configuration: 'Release'
           sdk: 'iphoneos13.2'
-          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit/LocalizedStringKit.xcodeproj'
+          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit.xcodeproj'
           scheme: 'LocalizedStringKit'
           xcodeVersion: specifyPath
           xcodeDeveloperDir: /Applications/Xcode_11.3.1.app
@@ -28,7 +28,7 @@ jobs:
           actions: test
           configuration: 'Debug'
           sdk: 'iphoneos13.2'
-          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit/LocalizedStringKit.xcodeproj'
+          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit.xcodeproj'
           scheme: 'LocalizedStringKitTests'
           xcodeVersion: specifyPath
           xcodeDeveloperDir: /Applications/Xcode_11.3.1.app

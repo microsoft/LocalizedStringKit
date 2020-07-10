@@ -7,3 +7,5 @@ pyvenv.cfg
 generation/bin/*
 generation/dist
 .DS_Store
+.build
+build
