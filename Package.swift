@@ -7,6 +7,7 @@ let package = Package(
     products: [
         .library(
             name: "LocalizedStringKit",
+            type: .dynamic,
             targets: ["LocalizedStringKit"]),
     ],
     dependencies: [],
