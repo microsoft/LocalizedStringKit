@@ -121,7 +121,6 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable tableName) {
     }
 
     NSURL *newPath = [[searchPath URLByAppendingPathComponent:@".."] absoluteURL];
-    
     if ([newPath isEqual:searchPath])
     {
       break;
