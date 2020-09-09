@@ -26,7 +26,9 @@ For any issues, refer to the Carthage documentation.
 
 ### Strings bundle
 
-The app and the library need to be able to access the strings bundle. To do this we are going to do some basic setup:
+The app and the library need to be able to access the strings bundle(s). To do this we are going to do some basic setup:
+
+#### Primary Bundle
 
 1. Create a folder in your app project somewhere named `LocalizedStringKit`.
 2. Inside that folder, create a new folder named `LocalizedStringKit.bundle` (this will turn it into a bundle).
@@ -40,6 +42,15 @@ ProjectName/
 ├── LocalizedStringKit/
 |   ├── LocalizedStringKit.bundle/
 ```
+
+#### Secondary Bundle(s): tableNames
+
+To leverage the tableName segmentation of strings in multiple bundles, you'll need to create these bundles as well.
+
+1. Navigate to the first `LocalizedStringKit` folder that was created in the Primary set up.
+2. Inside that folder, create a new folder named `<tableName>.bundle` (this will turn it into a bundle). Make sure to replace `tableName` with the case sensitive tableName you will use in your source.
+3. Add this bundle to your project in Xcode
+4. Ensure that this bundle is copied to your main app bundle (even if you are going to be using it in a framework).
 
 ### Creating some new strings
 
