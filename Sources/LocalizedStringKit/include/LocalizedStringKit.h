@@ -12,17 +12,27 @@ FOUNDATION_EXPORT double LocalizedStringKitVersionNumber;
 //! Project version string for LocalizedStringKit.
 FOUNDATION_EXPORT const unsigned char LocalizedStringKitVersionString[];
 
+/// Primary localization function used to localize strings (excluding tableName)
+///
+/// @param value: The English string
+/// @param comment: String to give context where the value string is used
+///
+/// Examples
+/// Localized("Cancel", "Action sheet action title")
+NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment);
+
+
 /// Primary localization function used to localize strings
 ///
 /// @param value: The English string
 /// @param comment: String to give context where the value string is used
-/// @param tableName: Optional string to provide additional classification of the value string. Can be used to segment groups of strings in multiple bundles.
+/// @param tableName: String to provide additional classification of the value string. Can be used to segment groups of strings in multiple bundles.
 ///
 /// Examples
 /// Localized("Cancel", "Action sheet action title", nil)
 /// Localized("Cancel", "Action sheet action title", "primary")
 /// Localized("Cancel", "Action sheet action title", "primary")
-NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nullable tableName);
+NSString *LocalizedWithTable(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull tableName);
 
 /// Additional localization function used to localize strings
 ///

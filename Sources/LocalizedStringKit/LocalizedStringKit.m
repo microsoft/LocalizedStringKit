@@ -14,7 +14,11 @@
 
 #pragma mark - Public
 
-NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nullable tableName) {
+NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment) {
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil tableName:nil];
+}
+
+NSString *LocalizedWithTable(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull tableName) {
   return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil tableName:tableName];
 }
 

@@ -18,14 +18,14 @@ final class LocalizedStringKitTests: XCTestCase {
     func testExample() {
       // Note: if this test fails its likely the device was set to a none EN locale.
       if Locale.current.languageCode == "en" {
-        XCTAssertEqual(Localized("Done", "Done", nil), "Done")
-        XCTAssertEqual(Localized("Not a Localized String", "Done", nil), "Not a Localized String")
+        XCTAssertEqual(Localized("Done", "Done"), "Done")
+        XCTAssertEqual(Localized("Not a Localized String", "Done"), "Not a Localized String")
         XCTAssertEqual(LocalizationUnnecessary("Not Needed"), "Not Needed")
       }
       else {
         XCTFail("Please add other development language localization tests")
-        XCTAssertEqual(Localized("Done", "Done", nil), "Done")
-        XCTAssertEqual(Localized("Not a Localized String", "Done", nil), "Not a Localized String")
+        XCTAssertEqual(Localized("Done", "Done"), "Done")
+        XCTAssertEqual(LocalizedWithTable("Not a Localized String", "Done", "primary"), "Not a Localized String")
         XCTAssertEqual(LocalizationUnnecessary("Not Needed"), "Not Needed")
       }
     }
