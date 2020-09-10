@@ -60,6 +60,6 @@ NSString *LocalizationUnnecessary(NSString *value);
 /// Load the bundle which contains the localized strings
 ///
 /// @param bundleName: Optional bundleName to find related bundle for strings. bundleNames can be used to segment localized string bundles. If nil, default bundle will be returned.
-NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName);
+NSBundle * _Nullable LSKLocalizedStringKitBundle(NSString *_Nullable bundleName);
 
 NS_ASSUME_NONNULL_END
