@@ -14,16 +14,20 @@
 
 #pragma mark - Public
 
+NSString *_Nonnull LSKPrimaryBundleName = @"LocalizedStringKit.bundle";
+
+NSURL *_Nullable LSKAlternateBundleSearchPath = nil;
+
 NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment) {
-  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil tableName:nil];
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil bundleName:nil];
 }
 
-NSString *LocalizedWithTable(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull tableName) {
-  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil tableName:tableName];
+NSString *LocalizedWithBundle(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull bundleName) {
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil bundleName:bundleName];
 }
 
-NSString *LocalizedWithKeyExtension(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull keyExtension, NSString *_Nullable tableName) {
-  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension tableName:tableName];
+NSString *LocalizedWithKeyExtension(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull keyExtension, NSString *_Nullable bundleName) {
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension bundleName:bundleName];
 }
 
 __attribute__((annotate("returns_localized_nsstring")))
@@ -31,13 +35,13 @@ NSString *LocalizationUnnecessary(NSString *value) {
   return value;
 }
 
-NSBundle *getLocalizedStringKitBundle(NSString *_Nullable tableName) {
-  return [LocalizedStringKit getLocalizedStringKitBundle:tableName];
+NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
+  return [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
 }
 
 #pragma mark - Private / Static
 
-+ (NSString *)localizeWithValue:(NSString *_Nonnull)value comment:(NSString *_Nonnull)comment keyExtension:(NSString *_Nullable)keyExtension tableName:(NSString *_Nullable)tableName
++ (NSString *)localizeWithValue:(NSString *_Nonnull)value comment:(NSString *_Nonnull)comment keyExtension:(NSString *_Nullable)keyExtension bundleName:(NSString *_Nullable)bundleName
 {
   // Key
   NSString *key = [self keyWithValue:value keyExtension:keyExtension];
@@ -45,26 +49,26 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable tableName) {
   // Table: This does not change between bundles
   NSString *table = @"LocalizedStringKit";
 
-  // Bundle Map: [tableName String: NSBundle]
+  // Bundle Map: [bundleName String: NSBundle]
   static NSMutableDictionary<NSString *, NSBundle *> *bundleMap = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     bundleMap = [[NSMutableDictionary alloc] init];
   });
 
-  if (tableName == nil)
+  if (bundleName == nil)
   {
     // Default to primary strings bundle
-    tableName = @"LocalizedStringKit.bundle";
+    bundleName = @"LocalizedStringKit.bundle";
   }
 
-  NSBundle *bundle = [bundleMap objectForKey:tableName];
+  NSBundle *bundle = [bundleMap objectForKey:bundleName];
 
   if (bundle == nil)
   {
     // Load and cache bundle
-    bundle = [LocalizedStringKit getLocalizedStringKitBundle:tableName];
-    [bundleMap setObject:bundle forKey:tableName];
+    bundle = [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
+    [bundleMap setObject:bundle forKey:bundleName];
   }
 
   if (bundle == nil)
@@ -101,23 +105,35 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable tableName) {
   return key;
 }
 
-+ (NSBundle *)getLocalizedStringKitBundle:(NSString *_Nullable)tableName
++ (NSBundle *)getLocalizedStringKitBundle:(NSString *_Nullable)bundleName
 {
+  // Search Paths
   NSURL *searchPath = [[NSBundle mainBundle] bundleURL];
 
-  if (tableName == nil) {
-    // Defaults to primary bundle if tableName not specified
-    tableName = @"LocalizedStringKit.bundle";
+  // Determine target bundleName
+  if (bundleName == nil) {
+    // Defaults to primary bundle if bundleName not specified
+    bundleName = LSKPrimaryBundleName;
   }
   else
   {
     // Append suffix
-    tableName = [tableName stringByAppendingFormat:@".bundle"];
+    bundleName = [bundleName stringByAppendingFormat:@".bundle"];
   }
 
+  // Alternate path check, if url specified
+  if (LSKAlternateBundleSearchPath != nil) {
+    NSURL *alternateBundleURL = [LSKAlternateBundleSearchPath URLByAppendingPathComponent:bundleName];
+    NSBundle *bundle = [NSBundle bundleWithURL:alternateBundleURL];
+    if (bundle) {
+      return bundle;
+    }
+  }
+
+  // Primary searchPath check
   while(YES)
   {
-    NSURL *bundleURL = [searchPath URLByAppendingPathComponent:tableName];
+    NSURL *bundleURL = [searchPath URLByAppendingPathComponent:bundleName];
     NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
 
     if (bundle)

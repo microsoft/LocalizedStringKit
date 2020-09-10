@@ -25,7 +25,7 @@ final class LocalizedStringKitTests: XCTestCase {
       else {
         XCTFail("Please add other development language localization tests")
         XCTAssertEqual(Localized("Done", "Done"), "Done")
-        XCTAssertEqual(LocalizedWithTable("Not a Localized String", "Done", "primary"), "Not a Localized String")
+        XCTAssertEqual(LocalizedWithBundle("Not a Localized String", "Done", "primary"), "Not a Localized String")
         XCTAssertEqual(LocalizationUnnecessary("Not Needed"), "Not Needed")
       }
     }
