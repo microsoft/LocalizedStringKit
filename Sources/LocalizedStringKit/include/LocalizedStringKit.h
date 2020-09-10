@@ -15,7 +15,7 @@ FOUNDATION_EXPORT const unsigned char LocalizedStringKitVersionString[];
 /// The name to be used for the primary strings bundle
 /// Example:
 /// "Localizable" (do not include the extension suffix)
-FOUNDATION_EXPORT NSString *_Nonnull primaryBundleName;
+FOUNDATION_EXPORT NSString *_Nonnull LSKPrimaryBundleName;
 
 /// URL for alternate string bundle search (the root from where search will begin)
 FOUNDATION_EXPORT NSURL *_Nullable LSKAlternateBundleSearchPath;
