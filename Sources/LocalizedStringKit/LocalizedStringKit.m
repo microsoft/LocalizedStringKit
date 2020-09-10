@@ -14,9 +14,9 @@
 
 #pragma mark - Public
 
-NSString *_Nonnull primaryBundleName = @"LocalizedStringKit.bundle";
+NSString *_Nonnull LSKPrimaryBundleName = @"LocalizedStringKit.bundle";
 
-NSURL *_Nullable alternateBundleSearchPath = nil;
+NSURL *_Nullable LSKAlternateBundleSearchPath = nil;
 
 NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment) {
   return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil bundleName:nil];
@@ -113,7 +113,7 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   // Determine target bundleName
   if (bundleName == nil) {
     // Defaults to primary bundle if bundleName not specified
-    bundleName = primaryBundleName;
+    bundleName = LSKPrimaryBundleName;
   }
   else
   {
@@ -121,24 +121,24 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
     bundleName = [bundleName stringByAppendingFormat:@".bundle"];
   }
 
+  // Alternate path check, if url specified
+  if (LSKAlternateBundleSearchPath != nil) {
+    NSURL *alternateBundleURL = [LSKAlternateBundleSearchPath URLByAppendingPathComponent:bundleName];
+    NSBundle *bundle = [NSBundle bundleWithURL:alternateBundleURL];
+    if (bundle) {
+      return bundle;
+    }
+  }
+
+  // Primary searchPath check
   while(YES)
   {
-    // Primary searchPath check
     NSURL *bundleURL = [searchPath URLByAppendingPathComponent:bundleName];
     NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
 
     if (bundle)
     {
       return bundle;
-    }
-
-    // Alternate path check, if url specified
-    if (alternateBundleSearchPath != nil) {
-      NSURL *alternateBundleURL = [alternateBundleSearchPath URLByAppendingPathComponent:bundleName];
-      NSBundle *bundle = [NSBundle bundleWithURL:alternateBundleURL];
-      if (bundle) {
-        return bundle;
-      }
     }
 
     NSURL *newPath = [[searchPath URLByAppendingPathComponent:@".."] absoluteURL];
