@@ -12,12 +12,18 @@
 
 @implementation LocalizedStringKit
 
-NSString *Localized(NSString *value, NSString *comment) {
-  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil];
+#pragma mark - Public
+
+NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment) {
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil tableName:nil];
 }
 
-NSString *LocalizedWithKeyExtension(NSString *value, NSString *comment, NSString *keyExtension) {
-  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension];
+NSString *LocalizedWithTable(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull tableName) {
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil tableName:tableName];
+}
+
+NSString *LocalizedWithKeyExtension(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull keyExtension, NSString *_Nullable tableName) {
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension tableName:tableName];
 }
 
 __attribute__((annotate("returns_localized_nsstring")))
@@ -25,25 +31,40 @@ NSString *LocalizationUnnecessary(NSString *value) {
   return value;
 }
 
-NSBundle *getLocalizedStringKitBundle() {
-  return [LocalizedStringKit getLocalizedStringKitBundle];
+NSBundle *getLocalizedStringKitBundle(NSString *_Nullable tableName) {
+  return [LocalizedStringKit getLocalizedStringKitBundle:tableName];
 }
 
-+ (NSString *)localizeWithValue:(NSString *)value comment:(NSString *)comment keyExtension:(NSString *)keyExtension
+#pragma mark - Private / Static
+
++ (NSString *)localizeWithValue:(NSString *_Nonnull)value comment:(NSString *_Nonnull)comment keyExtension:(NSString *_Nullable)keyExtension tableName:(NSString *_Nullable)tableName
 {
   // Key
   NSString *key = [self keyWithValue:value keyExtension:keyExtension];
 
-  // Table
+  // Table: This does not change between bundles
   NSString *table = @"LocalizedStringKit";
 
-  // Bundle
-  static NSBundle *bundle = nil;
+  // Bundle Map: [tableName String: NSBundle]
+  static NSMutableDictionary<NSString *, NSBundle *> *bundleMap = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    bundleMap = [[NSMutableDictionary alloc] init];
+  });
+
+  if (tableName == nil)
+  {
+    // Default to primary strings bundle
+    tableName = @"LocalizedStringKit.bundle";
+  }
+
+  NSBundle *bundle = [bundleMap objectForKey:tableName];
 
   if (bundle == nil)
   {
-    // Load cached reference ot `LocalizedStringKit` bundle
-    bundle = [LocalizedStringKit getLocalizedStringKitBundle];
+    // Load and cache bundle
+    bundle = [LocalizedStringKit getLocalizedStringKitBundle:tableName];
+    [bundleMap setObject:bundle forKey:tableName];
   }
 
   if (bundle == nil)
@@ -56,7 +77,7 @@ NSBundle *getLocalizedStringKitBundle() {
   return NSLocalizedStringWithDefaultValue(key, table, bundle, value, comment);
 }
 
-+ (NSString *)keyWithValue:(NSString *)value keyExtension:(NSString *)keyExtension
++ (NSString *)keyWithValue:(NSString *_Nonnull)value keyExtension:(NSString *)keyExtension
 {
   // Generate the `key` which is equal to the `MD5(<value>)` or `MD5(<value>:<keyExtension>)`. This logic must stay in sync with `localize.py`.
   NSString *hashInput = value;
@@ -80,13 +101,23 @@ NSBundle *getLocalizedStringKitBundle() {
   return key;
 }
 
-+ (NSBundle *)getLocalizedStringKitBundle
++ (NSBundle *)getLocalizedStringKitBundle:(NSString *_Nullable)tableName
 {
   NSURL *searchPath = [[NSBundle mainBundle] bundleURL];
 
+  if (tableName == nil) {
+    // Defaults to primary bundle if tableName not specified
+    tableName = @"LocalizedStringKit.bundle";
+  }
+  else
+  {
+    // Append suffix
+    tableName = [tableName stringByAppendingFormat:@".bundle"];
+  }
+
   while(YES)
   {
-    NSURL *bundleURL = [searchPath URLByAppendingPathComponent:@"LocalizedStringKit.bundle"];
+    NSURL *bundleURL = [searchPath URLByAppendingPathComponent:tableName];
     NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
 
     if (bundle)
@@ -95,7 +126,6 @@ NSBundle *getLocalizedStringKitBundle() {
     }
 
     NSURL *newPath = [[searchPath URLByAppendingPathComponent:@".."] absoluteURL];
-
     if ([newPath isEqual:searchPath])
     {
       break;

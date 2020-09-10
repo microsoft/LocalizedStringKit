@@ -30,6 +30,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		83988616250937B700A0FE95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "LocalizedStringKit::LocalizedStringKitTests";
+			remoteInfo = LocalizedStringKitTests;
+		};
 		DD3C4FFF24B8B50C00A83BC2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
@@ -104,7 +111,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -113,7 +120,6 @@
 				OBJ_16 /* Products */,
 				OBJ_25 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -212,7 +218,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_16 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -257,7 +263,7 @@
 		OBJ_46 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "LocalizedStringKit::LocalizedStringKitTests" /* LocalizedStringKitTests */;
-			targetProxy = "LocalizedStringKit::LocalizedStringKitTests" /* LocalizedStringKitTests */;
+			targetProxy = 83988616250937B700A0FE95 /* PBXContainerItemProxy */;
 		};
 		OBJ_56 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
