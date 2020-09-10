@@ -109,7 +109,8 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable tableName) {
     // Defaults to primary bundle if tableName not specified
     tableName = @"LocalizedStringKit.bundle";
   }
-  else {
+  else
+  {
     // Append suffix
     tableName = [tableName stringByAppendingFormat:@".bundle"];
   }
