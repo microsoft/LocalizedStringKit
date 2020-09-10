@@ -18,7 +18,7 @@ FOUNDATION_EXPORT const unsigned char LocalizedStringKitVersionString[];
 FOUNDATION_EXPORT NSString *_Nonnull primaryBundleName;
 
 /// URL for alternate string bundle search (the root from where search will begin)
-FOUNDATION_EXPORT NSURL *_Nullable alternateBundleSearchPath;
+FOUNDATION_EXPORT NSURL *_Nullable LSKAlternateBundleSearchPath;
 
 /// Primary localization function used to localize strings (excluding bundleName)
 ///
