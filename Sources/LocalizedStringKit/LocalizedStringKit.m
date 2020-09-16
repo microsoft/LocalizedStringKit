@@ -115,7 +115,7 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
     // Defaults to primary bundle if bundleName not specified
     bundleName = LSKPrimaryBundleName;
   }
-  else
+  else if ([bundleName rangeOfString:@".bundle"].location == NSNotFound)
   {
     // Append suffix
     bundleName = [bundleName stringByAppendingFormat:@".bundle"];
