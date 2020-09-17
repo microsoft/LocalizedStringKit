@@ -30,6 +30,18 @@ final class LocalizedStringKitTests: XCTestCase {
       }
     }
 
+    func testPrimaryBundleName() {
+      XCTAssertEqual(LSKPrimaryBundleName, "LocalizedStringKit.bundle")
+      SetPrimaryBundleName("Other.bundle")
+      XCTAssertEqual(LSKPrimaryBundleName, "Other.bundle")
+    }
+
+  func testAlternateBundleSearchPath() {
+    XCTAssertNil(LSKAlternateBundleSearchPath)
+    LSKAlternateBundleSearchPath = NSURL(string: "file://path")
+    XCTAssertEqual(LSKAlternateBundleSearchPath, NSURL(string: "file://path"))
+  }
+
   // TODO: LocalizedStringKit statically binds the Locale bundle so we cannot swap locale at runtime, if we need to
   //
   //  func testOtherLanguages() {
@@ -45,6 +57,6 @@ final class LocalizedStringKitTests: XCTestCase {
   //  }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample, testPrimaryBundleName, testAlternateBundleSearchPath),
     ]
 }
