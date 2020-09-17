@@ -29,7 +29,6 @@ FOUNDATION_EXPORT NSURL *_Nullable LSKAlternateBundleSearchPath;
 /// Localized("Cancel", "Action sheet action title")
 NSString *Localized(NSString *_Nonnull value, NSString *_Nonnull comment);
 
-
 /// Primary localization function used to localize strings
 ///
 /// @param value: The English string
@@ -61,5 +60,10 @@ NSString *LocalizationUnnecessary(NSString *value);
 ///
 /// @param bundleName: Optional bundleName to find related bundle for strings. bundleNames can be used to segment localized string bundles. If nil, default bundle will be returned.
 NSBundle * _Nullable LSKLocalizedStringKitBundle(NSString *_Nullable bundleName);
+
+/// Set the primary bundle name
+///
+/// @param bundleName: Nonnull bundle name to set as a String
+void SetPrimaryBundleName(NSString *_Nonnull bundleName);
 
 NS_ASSUME_NONNULL_END
