@@ -153,4 +153,8 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   return nil;
 }
 
+void LSKSetPrimaryBundleName(NSString *_Nonnull bundleName) {
+  LSKPrimaryBundleName = bundleName;
+}
+
 @end
