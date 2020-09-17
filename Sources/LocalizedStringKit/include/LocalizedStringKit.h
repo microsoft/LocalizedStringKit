@@ -64,6 +64,6 @@ NSBundle * _Nullable LSKLocalizedStringKitBundle(NSString *_Nullable bundleName)
 /// Set the primary bundle name
 ///
 /// @param bundleName: Nonnull bundle name to set as a String
-void SetPrimaryBundleName(NSString *_Nonnull bundleName);
+void LSKSetPrimaryBundleName(NSString *_Nonnull bundleName);
 
 NS_ASSUME_NONNULL_END

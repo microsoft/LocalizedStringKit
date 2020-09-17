@@ -153,7 +153,7 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   return nil;
 }
 
-void SetPrimaryBundleName(NSString *_Nonnull bundleName) {
+void LSKSetPrimaryBundleName(NSString *_Nonnull bundleName) {
   LSKPrimaryBundleName = bundleName;
 }
 

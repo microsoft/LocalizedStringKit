@@ -32,7 +32,7 @@ final class LocalizedStringKitTests: XCTestCase {
 
     func testPrimaryBundleName() {
       XCTAssertEqual(LSKPrimaryBundleName, "LocalizedStringKit.bundle")
-      SetPrimaryBundleName("Other.bundle")
+      LSKSetPrimaryBundleName("Other.bundle")
       XCTAssertEqual(LSKPrimaryBundleName, "Other.bundle")
     }
 
