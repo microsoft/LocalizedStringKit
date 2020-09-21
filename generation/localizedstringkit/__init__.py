@@ -16,35 +16,44 @@ from localizedstringkit.exceptions import InvalidLocalizedCallException
 from localizedstringkit.files import localizable_files
 
 
-SOURCE_CODE_FILE_NAME: str = "source_strings.m"
-BUNDLE_NAME: str = "LocalizedStringKit.bundle"
-
 log = logger.get()
 
 
-def generate_code_strings_file(code_files: List[str]) -> str:
-    """Generate a single code file with all strings.
+def generate_code_strings_file(code_files: List[str]) -> dict[str: str]:
+    """Generate a single code file with all strings per bundle.
 
     :param code_files: The list of file paths to generate the code strings for
 
-    :returns: The path to the temporary source code file with the standard NSLocalizedString calls
+    :returns: A dictionary of bundle name and path to the temporary source code file with the standard NSLocalizedString calls for that bundle
     """
 
-    output_path = tempfile.mktemp(suffix=".m")
-
+    # Get & dedupe localized strings
     localized_strings = detection.strings_in_code_files(code_files)
     localized_strings = list(set(localized_strings))
 
+    bundles: List[str] = []
+    for localized_string in localized_strings:
+        bundle = localized_string.bundle
+        if bundle is not None and bundle not in bundles:
+            bundles.append(bundle)
+
+    # Create output bundle and path dictionary for each unique bundle
+    output_paths: dict[str: str] = {}
+    for bundle in bundles:
+        output_paths[bundle] = tempfile.mktemp(suffix=".m")
+
     localized_strings.sort(key=lambda string: (string.key, string.key_extension, string.comment))
 
-    log.debug("Writing temporary source file at " + output_path)
+    for bundle, path in output_paths.items():
+        log.debug("Writing temporary source file at " + path + " for bundle " + bundle)
 
-    with open(output_path, "w") as temporary_source_file:
-        for localized_string in localized_strings:
-            temporary_source_file.write(localized_string.ns_localized_format())
-            temporary_source_file.write("\n")
+        with open(path, "w") as temporary_source_file:
+            for localized_string in localized_strings:
+                if localized_string.bundle == bundle:
+                    temporary_source_file.write(localized_string.ns_localized_format())
+                    temporary_source_file.write("\n")
 
-    return output_path
+    return output_paths
 
 
 def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_path: str) -> None:
@@ -61,26 +70,29 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
 
     log.info("Generating LocalizedStringKit.strings...")
 
-    code_strings_file: Optional[str] = None
+    code_strings_file: Optional[dict[str: str]] = None
 
-    # Generate a single .m file with all NSLocalizedStrings in it if we haven't
+    # Generate a .m file per unique bundle with all NSLocalizedStrings in it if we haven't
     # been given files explicitly
     code_strings_file = generate_code_strings_file(code_files)
 
-    generate_strings(
-        output_directory=os.path.join(localized_string_kit_path, BUNDLE_NAME),
-        file_paths=[code_strings_file],
-    )
+    # Iterate through output_paths dictionary and generate strings for each bundle
+    for bundle_name, path in code_strings_file.items():
+        # Generate strings
+        generate_strings(
+            output_directory=os.path.join(localized_string_kit_path, bundle_name),
+            file_paths=[path],
+        )
+        
+        # We need to track the code file as well so that we can tell if things
+        # have changed or not between successive runs
+        source_code_file_path = os.path.join(localized_string_kit_path, path)
 
-    # We need to track the code file as well so that we can tell if things
-    # have changed or not between successive runs
-    source_code_file_path = os.path.join(localized_string_kit_path, SOURCE_CODE_FILE_NAME)
+        # Update the code strings file
+        if os.path.exists(source_code_file_path):
+            os.remove(source_code_file_path)
 
-    # Update the code strings file
-    if os.path.exists(source_code_file_path):
-        os.remove(source_code_file_path)
-
-    shutil.move(code_strings_file, source_code_file_path)
+        shutil.move(path, source_code_file_path)
 
     # Success
     log.info("Generation complete")
@@ -99,16 +111,26 @@ def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> boo
 
     log.info("Determining if localization needs run")
 
-    existing_strings_path = os.path.join(localized_string_kit_path, SOURCE_CODE_FILE_NAME)
+    # Generate current code file paths
+    current_strings_paths = generate_code_strings_file(code_files)
 
-    if not os.path.exists(existing_strings_path):
-        return True
+    # Iterate through code files (1 per bundle)
+    for code_file in code_files:
+        existing_strings_path = os.path.join(localized_string_kit_path, "source_strings.m")
+        if code_file:
+            existing_strings_path = os.path.join(localized_string_kit_path, code_file)
 
-    current_strings_path = generate_code_strings_file(code_files)
+        if not os.path.exists(existing_strings_path):
+            return True
 
-    files_differ = not filecmp.cmp(existing_strings_path, current_strings_path)
+        files_differ = not filecmp.cmp(existing_strings_path, current_strings_paths[code_file])
 
-    if os.path.exists(current_strings_path):
-        os.remove(current_strings_path)
+        if os.path.exists(current_strings_paths[code_file]):
+            os.remove(current_strings_paths[code_file])
 
-    return files_differ
+        if files_differ:
+            return True
+
+    # Assume no changes after iteration of code_files
+    return False
+
