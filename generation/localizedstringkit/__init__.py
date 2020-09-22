@@ -45,7 +45,7 @@ def generate_code_strings_file(code_files: List[str]) -> dict[str: str]:
     localized_strings.sort(key=lambda string: (string.key, string.key_extension, string.comment))
 
     for bundle, path in output_paths.items():
-        log.debug("Writing temporary source file at " + path + " for bundle " + bundle)
+        log.debug(f"Writing temporary source file at {path} for bundle {bundle}")
 
         with open(path, "w") as temporary_source_file:
             for localized_string in localized_strings:
@@ -133,4 +133,3 @@ def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> boo
 
     # Assume no changes after iteration of code_files
     return False
-
