@@ -60,6 +60,8 @@ class BasicTestSuite(unittest.TestCase):
             },
         ]
 
+        self.assertNotEqual(len(detected_strings), 0)
+
         strings = {}
         for string in detected_strings:
             strings[string.key] = string

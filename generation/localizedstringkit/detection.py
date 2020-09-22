@@ -117,21 +117,25 @@ class Detector:
         # Find occurrences of `Localized` function calls
         matches_in_buffer: List[Tuple] = []
         for pattern, count in patterns:
-            matches_in_buffer = self._get_matches(pattern, count)
+            matches_in_buffer += self._get_matches(pattern, count)
 
         results = []
 
-        for match in matches_in_buffer:
-            match = tuple(
-                map(
-                    lambda component: component.replace(
+        for found_match in matches_in_buffer:
+            match: List = []
+            for i in range(len(found_match) - 1):
+                match.append(
+                    found_match[i].replace(
                         Detector.TEMPORARY_ESCAPE_SEQUENCE, Detector.QUOTE_ESCAPE_SEQUENCE
                     ),
-                    match,
                 )
-            )
 
-            if len(match) == 2:
+            match.append(found_match[-1])
+
+            # Subtract 1 for length since we append the deriving Pattern to the tuple
+            length: int = len(match) - 1
+
+            if length == 2:
                 # Standard Localized call
                 results.append(
                     LocalizedString(
