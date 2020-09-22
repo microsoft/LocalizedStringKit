@@ -43,7 +43,7 @@ def generate_code_strings_file(code_files: List[str]) -> dict:
     localized_strings.sort(key=lambda string: (string.key, string.key_extension, string.comment))
 
     # Create map of bundle and list of associated LocalizedStrings
-    string_map = {}
+    string_map: dict = {}
     for localized_string in localized_strings:
         if string_map.get(localized_string.bundle) is None:
             string_map[localized_string.bundle] = []
@@ -54,9 +54,8 @@ def generate_code_strings_file(code_files: List[str]) -> dict:
 
         with open(path, "w") as temporary_source_file:
             for localized_string in string_map.get(bundle):
-                if localized_string.bundle == bundle:
-                    temporary_source_file.write(localized_string.ns_localized_format())
-                    temporary_source_file.write("\n")
+                temporary_source_file.write(localized_string.ns_localized_format())
+                temporary_source_file.write("\n")
 
     return output_paths
 

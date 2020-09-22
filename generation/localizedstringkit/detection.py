@@ -66,7 +66,8 @@ class Detector:
             if len(match) != expected_match_count:
                 raise Exception("Found match with invalid number of capture groups: " + str(match))
 
-            matches_in_buffer.append(match)
+            result: Tuple = match + (pattern,)
+            matches_in_buffer.append(result)
 
         return matches_in_buffer
 
@@ -116,9 +117,7 @@ class Detector:
         # Find occurrences of `Localized` function calls
         matches_in_buffer: List[Tuple] = []
         for pattern, count in patterns:
-            # Append source Pattern to tuple to discern if bundle is overridden
-            match: Tuple = self._get_matches(pattern, count) + (pattern)
-            matches_in_buffer += match
+            matches_in_buffer = self._get_matches(pattern, count)
 
         results = []
 
