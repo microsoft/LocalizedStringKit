@@ -19,7 +19,7 @@ from localizedstringkit.files import localizable_files
 log = logger.get()
 
 
-def generate_code_strings_file(code_files: List[str]) -> Dict[str:str]:
+def generate_code_strings_file(code_files: List[str]) -> dict:
     """Generate a single code file with all strings per bundle.
 
     :param code_files: The list of file paths to generate the code strings for
@@ -36,7 +36,7 @@ def generate_code_strings_file(code_files: List[str]) -> Dict[str:str]:
     }
 
     # Create output bundle and path dictionary for each unique bundle
-    output_paths: dict[str:str] = {}
+    output_paths: dict = {}
     for bundle in bundles:
         output_paths[bundle] = tempfile.mktemp(suffix=".m")
 
@@ -75,7 +75,7 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
 
     log.info("Generating LocalizedStringKit.strings...")
 
-    code_strings_file: Optional[dict[str:str]] = None
+    code_strings_file: Optional[dict] = None
 
     # Generate a .m file per unique bundle with all NSLocalizedStrings in it if we haven't
     # been given files explicitly

@@ -195,7 +195,7 @@ class SwiftDetector(Detector):
                 (SwiftDetector.LOCALIZED_EXTENSION_PATTERN, 3),
                 (SwiftDetector.LOCALIZED_BUNDLE_PATTERN, 3),
             ],
-            LOCALIZED_BUNDLE_PATTERN,
+            SwiftDetector.LOCALIZED_BUNDLE_PATTERN,
         )
 
 
@@ -222,7 +222,7 @@ class ObjcDetector(Detector):
                 (ObjcDetector.LOCALIZED_EXTENSION_PATTERN, 3),
                 (ObjcDetector.LOCALIZED_BUNDLE_PATTERN, 3),
             ],
-            LOCALIZED_BUNDLE_PATTERN,
+            ObjcDetector.LOCALIZED_BUNDLE_PATTERN,
         )
 
 
