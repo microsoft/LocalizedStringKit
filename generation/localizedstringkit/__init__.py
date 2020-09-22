@@ -19,7 +19,7 @@ from localizedstringkit.files import localizable_files
 log = logger.get()
 
 
-def generate_code_strings_file(code_files: List[str]) -> dict[str: str]:
+def generate_code_strings_file(code_files: List[str]) -> Dict[str: str]:
     """Generate a single code file with all strings per bundle.
 
     :param code_files: The list of file paths to generate the code strings for
@@ -31,11 +31,7 @@ def generate_code_strings_file(code_files: List[str]) -> dict[str: str]:
     localized_strings = detection.strings_in_code_files(code_files)
     localized_strings = list(set(localized_strings))
 
-    bundles: List[str] = []
-    for localized_string in localized_strings:
-        bundle = localized_string.bundle
-        if bundle is not None and bundle not in bundles:
-            bundles.append(bundle)
+    bundles = {localized_string.bundle for localized_string in localized_strings if localized_string.bundle}
 
     # Create output bundle and path dictionary for each unique bundle
     output_paths: dict[str: str] = {}
@@ -44,11 +40,18 @@ def generate_code_strings_file(code_files: List[str]) -> dict[str: str]:
 
     localized_strings.sort(key=lambda string: (string.key, string.key_extension, string.comment))
 
+    # Create map of bundle and list of associated LocalizedStrings
+    string_map = {}
+    for localized_string in localized_strings:
+        if string_map.get(localized_string.bundle) is None:
+            string_map[localized_string.bundle] = []
+            string_map[localized_string.bundle].append(localized_string)
+
     for bundle, path in output_paths.items():
         log.debug(f"Writing temporary source file at {path} for bundle {bundle}")
 
         with open(path, "w") as temporary_source_file:
-            for localized_string in localized_strings:
+            for localized_string in string_map.get(bundle):
                 if localized_string.bundle == bundle:
                     temporary_source_file.write(localized_string.ns_localized_format())
                     temporary_source_file.write("\n")

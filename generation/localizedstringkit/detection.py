@@ -97,11 +97,12 @@ class Detector:
                 f"Found invalid calls to Localized in file: {self.file_path}, {matches}"
             )
 
-    def _detect_strings(self, patterns: List[Tuple[Pattern, int]]) -> List[LocalizedString]:
+    def _detect_strings(self, patterns: List[Tuple[Pattern, int]], bundle_pattern: Pattern) -> List[LocalizedString]:
         """Find all matching localized calls with a key specified in the buffer.
 
         :param patterns: The list of patterns and their expected match counts to
                          detect in the code file
+        :param bundle_pattern: A Pattern used to match strings with overridden bundle
 
         :returns: The list of localized strings
         """
@@ -114,18 +115,10 @@ class Detector:
         matches_in_buffer: List[Tuple] = []
         for pattern, count in patterns:
             # Append source Pattern to tuple to discern if bundle is overridden
-            match = self._get_matches(pattern, count) + (pattern)
+            match: Tuple = self._get_matches(pattern, count) + (pattern)
             matches_in_buffer += match
 
         results = []
-
-        # Overriden bundle patterns to check
-        SWIFT_LOCALIZED_BUNDLE_PATTERN: Pattern = re.compile(
-            r'LocalizedWithBundle\(\s*"(.+?)",\s*"(.*?)",\s*"(.*?)"\s*\)'
-        )
-        OBJC_LOCALIZED_BUNDLE_PATTERN: Pattern = re.compile(
-            r'LocalizedWithBundle\(\s*@"(.+?)",\s*@"(.*?)",\s*@"(.*?)"\s*\)'
-        )
 
         for match in matches_in_buffer:
             match = tuple(
@@ -148,7 +141,7 @@ class Detector:
                         comment=match[1],
                     )
                 )
-            elif match[-1] == SWIFT_LOCALIZED_BUNDLE_PATTERN or match[-1] == OBJC_LOCALIZED_BUNDLE_PATTERN:
+            elif match[-1] == bundle_pattern:
                 # Localized call with custom bundle
                 results.append(
                     LocalizedString(
@@ -195,7 +188,8 @@ class SwiftDetector(Detector):
         """
 
         return self._detect_strings(
-            [(SwiftDetector.LOCALIZED_PATTERN, 2), (SwiftDetector.LOCALIZED_EXTENSION_PATTERN, 3), (SwiftDetector.LOCALIZED_BUNDLE_PATTERN, 3)]
+            [(SwiftDetector.LOCALIZED_PATTERN, 2), (SwiftDetector.LOCALIZED_EXTENSION_PATTERN, 3), (SwiftDetector.LOCALIZED_BUNDLE_PATTERN, 3)],
+            LOCALIZED_BUNDLE_PATTERN
         )
 
 
@@ -217,7 +211,8 @@ class ObjcDetector(Detector):
         """
 
         return self._detect_strings(
-            [(ObjcDetector.LOCALIZED_PATTERN, 2), (ObjcDetector.LOCALIZED_EXTENSION_PATTERN, 3), (ObjcDetector.LOCALIZED_BUNDLE_PATTERN, 3)]
+            [(ObjcDetector.LOCALIZED_PATTERN, 2), (ObjcDetector.LOCALIZED_EXTENSION_PATTERN, 3), (ObjcDetector.LOCALIZED_BUNDLE_PATTERN, 3)],
+            LOCALIZED_BUNDLE_PATTERN
         )
 
 
