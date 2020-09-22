@@ -53,9 +53,11 @@ def generate_code_strings_file(code_files: List[str]) -> dict:
         log.debug(f"Writing temporary source file at {path} for bundle {bundle}")
 
         with open(path, "w") as temporary_source_file:
-            for localized_string in string_map.get(bundle):
-                temporary_source_file.write(localized_string.ns_localized_format())
-                temporary_source_file.write("\n")
+            strings: List = string_map[bundle]
+            if strings is not None:
+                for localized_string in strings:
+                    temporary_source_file.write(localized_string.ns_localized_format())
+                    temporary_source_file.write("\n")
 
     return output_paths
 
