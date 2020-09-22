@@ -86,13 +86,13 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
     for bundle_name, path in code_strings_file.items():
         # Generate strings
         generate_strings(
-            output_directory=os.path.join(localized_string_kit_path, bundle_name),
+            output_directory=os.path.join(localized_string_kit_path, bundle_name + ".bundle"),
             file_paths=[path],
         )
 
         # We need to track the code file as well so that we can tell if things
         # have changed or not between successive runs
-        source_code_file_path = os.path.join(localized_string_kit_path, path)
+        source_code_file_path = os.path.join(localized_string_kit_path, bundle_name + ".m")
 
         # Update the code strings file
         if os.path.exists(source_code_file_path):
@@ -122,9 +122,7 @@ def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> boo
 
     # Iterate through code files (1 per bundle)
     for code_file in code_files:
-        existing_strings_path = os.path.join(localized_string_kit_path, "source_strings.m")
-        if code_file:
-            existing_strings_path = os.path.join(localized_string_kit_path, code_file)
+        existing_strings_path = os.path.join(localized_string_kit_path, code_file)
 
         if not os.path.exists(existing_strings_path):
             return True
