@@ -97,7 +97,9 @@ class Detector:
                 f"Found invalid calls to Localized in file: {self.file_path}, {matches}"
             )
 
-    def _detect_strings(self, patterns: List[Tuple[Pattern, int]], bundle_pattern: Pattern) -> List[LocalizedString]:
+    def _detect_strings(
+        self, patterns: List[Tuple[Pattern, int]], bundle_pattern: Pattern
+    ) -> List[LocalizedString]:
         """Find all matching localized calls with a key specified in the buffer.
 
         :param patterns: The list of patterns and their expected match counts to
@@ -188,8 +190,12 @@ class SwiftDetector(Detector):
         """
 
         return self._detect_strings(
-            [(SwiftDetector.LOCALIZED_PATTERN, 2), (SwiftDetector.LOCALIZED_EXTENSION_PATTERN, 3), (SwiftDetector.LOCALIZED_BUNDLE_PATTERN, 3)],
-            LOCALIZED_BUNDLE_PATTERN
+            [
+                (SwiftDetector.LOCALIZED_PATTERN, 2),
+                (SwiftDetector.LOCALIZED_EXTENSION_PATTERN, 3),
+                (SwiftDetector.LOCALIZED_BUNDLE_PATTERN, 3),
+            ],
+            LOCALIZED_BUNDLE_PATTERN,
         )
 
 
@@ -211,8 +217,12 @@ class ObjcDetector(Detector):
         """
 
         return self._detect_strings(
-            [(ObjcDetector.LOCALIZED_PATTERN, 2), (ObjcDetector.LOCALIZED_EXTENSION_PATTERN, 3), (ObjcDetector.LOCALIZED_BUNDLE_PATTERN, 3)],
-            LOCALIZED_BUNDLE_PATTERN
+            [
+                (ObjcDetector.LOCALIZED_PATTERN, 2),
+                (ObjcDetector.LOCALIZED_EXTENSION_PATTERN, 3),
+                (ObjcDetector.LOCALIZED_BUNDLE_PATTERN, 3),
+            ],
+            LOCALIZED_BUNDLE_PATTERN,
         )
 
 

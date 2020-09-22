@@ -19,7 +19,7 @@ from localizedstringkit.files import localizable_files
 log = logger.get()
 
 
-def generate_code_strings_file(code_files: List[str]) -> Dict[str: str]:
+def generate_code_strings_file(code_files: List[str]) -> Dict[str:str]:
     """Generate a single code file with all strings per bundle.
 
     :param code_files: The list of file paths to generate the code strings for
@@ -31,10 +31,12 @@ def generate_code_strings_file(code_files: List[str]) -> Dict[str: str]:
     localized_strings = detection.strings_in_code_files(code_files)
     localized_strings = list(set(localized_strings))
 
-    bundles = {localized_string.bundle for localized_string in localized_strings if localized_string.bundle}
+    bundles = {
+        localized_string.bundle for localized_string in localized_strings if localized_string.bundle
+    }
 
     # Create output bundle and path dictionary for each unique bundle
-    output_paths: dict[str: str] = {}
+    output_paths: dict[str:str] = {}
     for bundle in bundles:
         output_paths[bundle] = tempfile.mktemp(suffix=".m")
 
@@ -73,7 +75,7 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
 
     log.info("Generating LocalizedStringKit.strings...")
 
-    code_strings_file: Optional[dict[str: str]] = None
+    code_strings_file: Optional[dict[str:str]] = None
 
     # Generate a .m file per unique bundle with all NSLocalizedStrings in it if we haven't
     # been given files explicitly
@@ -86,7 +88,7 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
             output_directory=os.path.join(localized_string_kit_path, bundle_name),
             file_paths=[path],
         )
-        
+
         # We need to track the code file as well so that we can tell if things
         # have changed or not between successive runs
         source_code_file_path = os.path.join(localized_string_kit_path, path)
