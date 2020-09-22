@@ -58,9 +58,10 @@ class BasicTestSuite(unittest.TestCase):
                 "comment": "This value contains some special tokens.",
                 "skip_value": True,
             },
+            {"text": "Another value", "comment": "Some comment", "bundle": "info.bundle"},
         ]
 
-        self.assertNotEqual(len(detected_strings), 0)
+        self.assertEqual(len(detected_strings) - 1, len(expectation_list))
 
         strings = {}
         for string in detected_strings:
@@ -86,7 +87,11 @@ class BasicTestSuite(unittest.TestCase):
 
             string = strings[key]
 
-            self.assertEqual(string.bundle, "")
+            if expectation == expectation_list[-1]:
+                self.assertEqual(string.bundle, "info.bundle")
+            else:
+                self.assertEqual(string.bundle, "")
+
             self.assertEqual(string.comment, expectation.get("comment"))
             self.assertEqual(string.key_extension, expectation.get("extension"))
             self.assertEqual(string.language, "en")
