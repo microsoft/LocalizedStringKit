@@ -90,7 +90,7 @@ class BasicTestSuite(unittest.TestCase):
             if expectation == expectation_list[-1]:
                 self.assertEqual(string.bundle, "info.bundle")
             else:
-                self.assertEqual(string.bundle, "")
+                self.assertEqual(string.bundle, "LocalizedStringKit.bundle")
 
             self.assertEqual(string.comment, expectation.get("comment"))
             self.assertEqual(string.key_extension, expectation.get("extension"))
