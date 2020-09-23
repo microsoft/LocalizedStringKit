@@ -40,3 +40,5 @@ Localized(
 // 12. Should localize with special tokens in `value` and `comment`
 Localized("First special token: \n and second special token: \"", "This value contains some special tokens.")
 
+// 13. Should localize with `value`, `comment`, and `bundle`
+LocalizedWithBundle("Another value", "Some comment", "info.bundle")
