@@ -47,7 +47,8 @@ def generate_code_strings_file(code_files: List[str]) -> dict:
     for localized_string in localized_strings:
         if string_map.get(localized_string.bundle) is None:
             string_map[localized_string.bundle] = []
-            string_map[localized_string.bundle].append(localized_string)
+
+        string_map[localized_string.bundle].append(localized_string)
 
     for bundle, path in output_paths.items():
         log.debug(f"Writing temporary source file at {path} for bundle {bundle}")
@@ -85,14 +86,18 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
     # Iterate through output_paths dictionary and generate strings for each bundle
     for bundle_name, path in code_strings_file.items():
         # Generate strings
+        name = bundle_name
+        if ".bundle" not in name:
+            name = bundle_name + ".bundle"
+
         generate_strings(
-            output_directory=os.path.join(localized_string_kit_path, bundle_name + ".bundle"),
-            file_paths=[path],
+            output_directory=os.path.join(localized_string_kit_path, name), file_paths=[path],
         )
 
         # We need to track the code file as well so that we can tell if things
         # have changed or not between successive runs
-        source_code_file_path = os.path.join(localized_string_kit_path, bundle_name + ".m")
+        m_file_name = name.replace(".bundle", ".m")
+        source_code_file_path = os.path.join(localized_string_kit_path, m_file_name)
 
         # Update the code strings file
         if os.path.exists(source_code_file_path):
