@@ -117,23 +117,27 @@ def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> boo
 
     log.info("Determining if localization needs run")
 
-    # Generate current code file paths
+    # Generate current code file paths; Dict of bundle: output_path
     current_strings_paths = generate_code_strings_file(code_files)
 
-    # Iterate through code files (1 per bundle)
-    for code_file in code_files:
-        existing_strings_path = os.path.join(localized_string_kit_path, code_file)
+    for bundle, path in current_strings_paths:
+        m_file = bundle.replace(".bundle", ".m")
+        if m_file == "":
+            # Localized calls with empty bundle get defaulted to this source file names
+            m_file = "source_strings.m"
 
+        existing_strings_path = os.path.join(localized_string_kit_path, m_file)
+
+        # Check if .m for given bundle exists
         if not os.path.exists(existing_strings_path):
             return True
 
-        files_differ = not filecmp.cmp(existing_strings_path, current_strings_paths[code_file])
+        files_differ = not filecmp.cmp(existing_strings_path, path)
 
-        if os.path.exists(current_strings_paths[code_file]):
-            os.remove(current_strings_paths[code_file])
+        if os.path.exists(path):
+            os.remove(path)
 
         if files_differ:
             return True
 
-    # Assume no changes after iteration of code_files
     return False
