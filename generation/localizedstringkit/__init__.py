@@ -120,9 +120,9 @@ def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> boo
     # Generate current code file paths; Dict of bundle: output_path
     current_strings_paths = generate_code_strings_file(code_files)
 
-    for bundle, path in current_strings_paths:
+    for bundle, path in current_strings_paths.items():
         m_file = bundle.replace(".bundle", ".m")
-        if m_file == "":
+        if not m_file:
             # Localized calls with empty bundle get defaulted to this source file names
             m_file = "source_strings.m"
 
