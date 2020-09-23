@@ -144,6 +144,8 @@ class Detector:
                         language="en",
                         table="LocalizedStringKit",
                         comment=match[1],
+                        key_extension=None,
+                        bundle="LocalizedStringKit.bundle",
                     )
                 )
             elif match[-1] == bundle_pattern:
@@ -169,6 +171,7 @@ class Detector:
                         table="LocalizedStringKit",
                         comment=match[1],
                         key_extension=match[2],
+                        bundle="LocalizedStringKit.bundle",
                     )
                 )
 
