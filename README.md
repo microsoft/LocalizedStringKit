@@ -1,5 +1,7 @@
 # LocalizedStringKit
 
+![LocalizedStringKit Logo](https://raw.githubusercontent.com/microsoft/localizedStringKit/master/logo.png)
+
 LocalizedStringKit is a tool that lets you write English strings directly into your source code and generate the required .strings files later. No more manually managing string keys or remembering to add them to the strings file later. All you do is change: 
 
 ```swift
@@ -121,6 +123,10 @@ find "${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/LocalizedStringKit.bundle" -na
 ```
 
 On build, the files in your binary will now be compressed. 
+
+### Is this available through Swift Package Manager?
+Yes, it is listed on the Swift Package Index [here](https://swiftpackageindex.com/microsoft/LocalizedStringKit)
+
 
 # Contributing
 
