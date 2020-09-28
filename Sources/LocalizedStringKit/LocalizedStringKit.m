@@ -68,13 +68,12 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   {
     // Load and cache bundle
     bundle = [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
+    if (bundle == nil)
+    {
+      // Unable to load `LocalizedStringKit` bundle
+      return value;
+    }
     [bundleMap setObject:bundle forKey:bundleName];
-  }
-
-  if (bundle == nil)
-  {
-    // Unable to load `LocalizedStringKit` bundle
-    return value;
   }
 
   // Forward to `NSLocalizedString`
