@@ -66,6 +66,11 @@ NSBundle * _Nullable LSKLocalizedStringKitBundle(NSString *_Nullable bundleName)
 /// @param bundleName: Nonnull bundle name to set as a String
 void LSKSetPrimaryBundleName(NSString *_Nonnull bundleName);
 
+/// Set the alternate bundle search path
+///
+/// @param url: URL to search
+void LSKSetAlternateBundleSearchPath(NSURL *_Nonnull url);
+
 /// Get a strings bundle
 ///
 /// @param bundleName: Name of bundle to search for
