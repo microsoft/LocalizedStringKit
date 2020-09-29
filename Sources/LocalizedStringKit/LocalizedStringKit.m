@@ -35,7 +35,7 @@ NSString *LocalizationUnnecessary(NSString *value) {
   return value;
 }
 
-NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
+NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   return [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
 }
 
@@ -104,7 +104,7 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   return key;
 }
 
-+ (NSBundle *)getLocalizedStringKitBundle:(NSString *_Nullable)bundleName
++ (NSBundle *_Nullable)getLocalizedStringKitBundle:(NSString *_Nullable)bundleName
 {
   // Search Paths
   NSURL *searchPath = [[NSBundle mainBundle] bundleURL];

@@ -69,6 +69,6 @@ void LSKSetPrimaryBundleName(NSString *_Nonnull bundleName);
 /// Get a strings bundle
 ///
 /// @param bundleName: Name of bundle to search for
-NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName);
+NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName);
 
 NS_ASSUME_NONNULL_END
