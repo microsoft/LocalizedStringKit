@@ -12,7 +12,7 @@
 
 @implementation LocalizedStringKit
 
-static NSMutableDictionary<NSString *, NSBundle *> *bundleMap = nil;
+static NSMutableDictionary *bundleMap = nil;
 
 #pragma mark - Public
 
@@ -71,10 +71,16 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
     bundle = [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
     if (bundle == nil)
     {
+      [bundleMap setObject:[NSNull null] forKey:bundleName];
       // Unable to load `LocalizedStringKit` bundle
       return value;
     }
     [bundleMap setObject:bundle forKey:bundleName];
+  }
+
+  if ([bundle isKindOfClass:[NSNull class]]) {
+    // Resolved NSNull for bundle
+    return value;
   }
 
   // Forward to `NSLocalizedString`
