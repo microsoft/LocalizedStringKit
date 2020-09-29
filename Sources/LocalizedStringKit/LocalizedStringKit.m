@@ -35,7 +35,7 @@ NSString *LocalizationUnnecessary(NSString *value) {
   return value;
 }
 
-NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
+NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   return [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
 }
 
@@ -68,13 +68,12 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   {
     // Load and cache bundle
     bundle = [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
+    if (bundle == nil)
+    {
+      // Unable to load `LocalizedStringKit` bundle
+      return value;
+    }
     [bundleMap setObject:bundle forKey:bundleName];
-  }
-
-  if (bundle == nil)
-  {
-    // Unable to load `LocalizedStringKit` bundle
-    return value;
   }
 
   // Forward to `NSLocalizedString`
@@ -105,7 +104,7 @@ NSBundle *getLocalizedStringKitBundle(NSString *_Nullable bundleName) {
   return key;
 }
 
-+ (NSBundle *)getLocalizedStringKitBundle:(NSString *_Nullable)bundleName
++ (NSBundle *_Nullable)getLocalizedStringKitBundle:(NSString *_Nullable)bundleName
 {
   // Search Paths
   NSURL *searchPath = [[NSBundle mainBundle] bundleURL];
