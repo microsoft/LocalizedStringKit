@@ -12,6 +12,8 @@
 
 @implementation LocalizedStringKit
 
+static NSMutableDictionary<NSString *, NSBundle *> *bundleMap = nil;
+
 #pragma mark - Public
 
 NSString *_Nonnull LSKPrimaryBundleName = @"LocalizedStringKit.bundle";
@@ -50,7 +52,6 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
   NSString *table = @"LocalizedStringKit";
 
   // Bundle Map: [bundleName String: NSBundle]
-  static NSMutableDictionary<NSString *, NSBundle *> *bundleMap = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     bundleMap = [[NSMutableDictionary alloc] init];
@@ -136,11 +137,17 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
     NSURL *bundleURL = [searchPath URLByAppendingPathComponent:bundleName];
     NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
 
-    if (bundle)
+    if (bundle != nil)
     {
         NSLog(@"Found bundle; Path: %@", bundle.bundleURL);
-      return bundle;
+        if ([bundle.bundleURL.lastPathComponent isEqualToString:bundleName]) {
+            return bundle;
+        }
+        else {
+            break;
+        }
     }
+
 
     NSURL *newPath = [[searchPath URLByAppendingPathComponent:@".."] absoluteURL];
       NSLog(@"Updating to newPath: %@", newPath);
@@ -158,6 +165,11 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
 
 void LSKSetPrimaryBundleName(NSString *_Nonnull bundleName) {
   LSKPrimaryBundleName = bundleName;
+}
+
+void LSKSetAlternateBundleSearchPath(NSURL *_Nonnull url) {
+    LSKAlternateBundleSearchPath = url;
+    [bundleMap removeAllObjects];
 }
 
 @end
