@@ -106,6 +106,7 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
 
 + (NSBundle *_Nullable)getLocalizedStringKitBundle:(NSString *_Nullable)bundleName
 {
+    NSLog(@"Resolving bundle: %@...", bundleName);
   // Search Paths
   NSURL *searchPath = [[NSBundle mainBundle] bundleURL];
 
@@ -137,11 +138,13 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
 
     if (bundle)
     {
+        NSLog(@"Found bundle; Path: %@", bundle.bundleURL);
       return bundle;
     }
 
-    NSURL *newPath = [[searchPath URLByDeletingLastPathComponent] absoluteURL];
-    if ([newPath isEqual:searchPath] || [newPath isEqual:[[NSBundle mainBundle] bundleURL]])
+    NSURL *newPath = [[searchPath URLByAppendingPathComponent:@".."] absoluteURL];
+      NSLog(@"Updating to newPath: %@", newPath);
+    if ([newPath isEqual:searchPath])
     {
       break;
     }
@@ -149,6 +152,7 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
     searchPath = newPath;
   }
 
+    NSLog(@"Cannot find bundle for bundleName: %@", bundleName);
   return nil;
 }
 
