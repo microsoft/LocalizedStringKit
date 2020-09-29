@@ -140,8 +140,8 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
       return bundle;
     }
 
-    NSURL *newPath = [[searchPath URLByAppendingPathComponent:@".."] absoluteURL];
-    if ([newPath isEqual:searchPath])
+    NSURL *newPath = [[searchPath URLByDeletingLastPathComponent] absoluteURL];
+    if ([newPath isEqual:searchPath] || [newPath isEqual:[[NSBundle mainBundle] bundleURL]])
     {
       break;
     }
