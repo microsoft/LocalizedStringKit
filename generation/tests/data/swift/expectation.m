@@ -11,3 +11,4 @@ NSLocalizedStringWithDefaultValue(@"91f3a2c0e4424c87689525da44c4db11", @"Localiz
 NSLocalizedStringWithDefaultValue(@"d3d2e617335f08df83599665eef8a418", @"LocalizedStringKit", @"LocalizedStringKit.bundle", @"Close", @"The name of the close menu button.");
 NSLocalizedStringWithDefaultValue(@"c66ca1c7ea0b6321bd07e3f0880c906d", @"LocalizedStringKit", @"LocalizedStringKit.bundle", @"First special token: \n and second special token: \"", @"This value contains some special tokens.");
 NSLocalizedStringWithDefaultValue(@"acd82a6c86ebd83573c6ba39847d5f98", @"LocalizedStringKit", @"info.bundle", @"Another value", @"Some comment");
+NSLocalizedStringWithDefaultValue(@"47c551f1b14d6a46a5e0708ccb4449df", @"LocalizedStringKit", @"info.bundle", @"Another value", @"Some comment");

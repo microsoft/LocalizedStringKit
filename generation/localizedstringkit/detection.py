@@ -135,6 +135,7 @@ class Detector:
             # Subtract 1 for length since we append the deriving Pattern to the tuple
             length: int = len(match) - 1
 
+            # TODO: Use a better method for identifying these
             if length == 2:
                 # Standard Localized call
                 results.append(
@@ -148,21 +149,35 @@ class Detector:
                         bundle="LocalizedStringKit.bundle",
                     )
                 )
-            elif match[-1] == bundle_pattern:
-                # Localized call with custom bundle
-                results.append(
-                    LocalizedString(
-                        key=None,
-                        value=match[0],
-                        language="en",
-                        table="LocalizedStringKit",
-                        comment=match[1],
-                        key_extension=None,
-                        bundle=match[2],
+            elif length == 3:
+                if match[-1] == bundle_pattern:
+                    # Localized call with custom bundle
+                    results.append(
+                        LocalizedString(
+                            key=None,
+                            value=match[0],
+                            language="en",
+                            table="LocalizedStringKit",
+                            comment=match[1],
+                            key_extension=None,
+                            bundle=match[2],
+                        )
                     )
-                )
+                else:
+                    # Localized call with key extension
+                    results.append(
+                        LocalizedString(
+                            key=None,
+                            value=match[0],
+                            language="en",
+                            table="LocalizedStringKit",
+                            comment=match[1],
+                            key_extension=match[2],
+                            bundle="LocalizedStringKit.bundle",
+                        )
+                    )
             else:
-                # Localized call with key extension
+                # Localized call with key extension and custom bundle
                 results.append(
                     LocalizedString(
                         key=None,
@@ -171,7 +186,7 @@ class Detector:
                         table="LocalizedStringKit",
                         comment=match[1],
                         key_extension=match[2],
-                        bundle="LocalizedStringKit.bundle",
+                        bundle=match[3],
                     )
                 )
 
@@ -182,11 +197,14 @@ class SwiftDetector(Detector):
     """Detect localized strings in Swift code files."""
 
     LOCALIZED_PATTERN: Pattern = re.compile(r'Localized\(\s*"(.+?)",\s*"(.*?)"\s*\)')
+    LOCALIZED_BUNDLE_PATTERN: Pattern = re.compile(
+        r'LocalizedWithBundle\(\s*"(.+?)",\s*"(.*?)",\s*"(.*?)"\s*\)'
+    )
     LOCALIZED_EXTENSION_PATTERN: Pattern = re.compile(
         r'LocalizedWithKeyExtension\(\s*"(.+?)",\s*"(.*?)",\s*"(.*?)"\s*\)'
     )
-    LOCALIZED_BUNDLE_PATTERN: Pattern = re.compile(
-        r'LocalizedWithBundle\(\s*"(.+?)",\s*"(.*?)",\s*"(.*?)"\s*\)'
+    LOCALIZED_EXTENSION_BUNDLE_PATTERN: Pattern = re.compile(
+        r'LocalizedWithKeyExtensionAndBundle\(\s*"(.+?)",\s*"(.*?)",\s*"(.*?)",\s*"(.*?)"\s*\)'
     )
 
     def find_strings(self) -> List[LocalizedString]:
@@ -200,6 +218,7 @@ class SwiftDetector(Detector):
                 (SwiftDetector.LOCALIZED_PATTERN, 2),
                 (SwiftDetector.LOCALIZED_EXTENSION_PATTERN, 3),
                 (SwiftDetector.LOCALIZED_BUNDLE_PATTERN, 3),
+                (SwiftDetector.LOCALIZED_EXTENSION_BUNDLE_PATTERN, 4),
             ],
             SwiftDetector.LOCALIZED_BUNDLE_PATTERN,
         )
@@ -215,6 +234,9 @@ class ObjcDetector(Detector):
     LOCALIZED_BUNDLE_PATTERN: Pattern = re.compile(
         r'LocalizedWithBundle\(\s*@"(.+?)",\s*@"(.*?)",\s*@"(.*?)"\s*\)'
     )
+    LOCALIZED_EXTENSION_BUNDLE_PATTERN: Pattern = re.compile(
+        r'LocalizedWithKeyExtensionAndBundle\(\s*@"(.+?)",\s*@"(.*?)",\s*@"(.*?)",\s*@"(.*?)"\s*\)'
+    )
 
     def find_strings(self) -> List[LocalizedString]:
         """Find all matching localized calls with a key specified in the buffer.
@@ -227,6 +249,7 @@ class ObjcDetector(Detector):
                 (ObjcDetector.LOCALIZED_PATTERN, 2),
                 (ObjcDetector.LOCALIZED_EXTENSION_PATTERN, 3),
                 (ObjcDetector.LOCALIZED_BUNDLE_PATTERN, 3),
+                (ObjcDetector.LOCALIZED_EXTENSION_BUNDLE_PATTERN, 4),
             ],
             ObjcDetector.LOCALIZED_BUNDLE_PATTERN,
         )
