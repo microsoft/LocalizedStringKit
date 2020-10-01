@@ -4,32 +4,30 @@
         "**/.mypy_cache": true,
         "**/.pytest_cache": true,
         ".cache/": true,
-        "bin/": true,
-        "include/": true,
+        "venv/": true,
         "junit/": true,
-        "lib/": true,
     },
     "python.formatting.provider": "black",
-    "python.formatting.blackPath": "${workspaceFolder}/bin/black",
+    "python.formatting.blackPath": "${workspaceFolder}/venv/bin/black",
     "python.formatting.blackArgs": [
         "--line-length",
         "100"
     ],
     "python.linting.enabled": true,
     "python.linting.mypyEnabled": true,
-    "python.linting.mypyPath": "${workspaceFolder}/bin/mypy",
+    "python.linting.mypyPath": "${workspaceFolder}/venv/bin/mypy",
     "python.linting.mypyArgs": [
         "--config-file=${workspaceFolder}/mypy.ini"
     ],
     "python.linting.pylintEnabled": true,
-    "python.linting.pylintPath": "${workspaceFolder}/bin/pylint",
+    "python.linting.pylintPath": "${workspaceFolder}/venv/bin/pylint",
     "python.linting.pylintArgs": [
         "--rcfile=${workspaceFolder}/.pylintrc",
         "--extension-pkg-whitelist=mypy",
         "--init-hook",
         "import sys; sys.path.insert(0, '${workspaceFolder}/localizedstringkit')"
     ],
-    "python.pythonPath": "${workspaceFolder}/bin/python3",
+    "python.pythonPath": "venv/bin/python3",
     "python.testing.pytestArgs": [
         "tests"
     ],

@@ -1,10 +1,9 @@
 **/xcuserdata/**
 __pycache__
-generation/lib/*
 pyvenv.cfg
 **/.mypy_cache/**
 **/*.egg-info/*
-generation/bin/*
+generation/venv/*
 generation/dist
 .DS_Store
 .build

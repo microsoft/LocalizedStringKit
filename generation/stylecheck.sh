@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd "${VIRTUAL_ENV}" > /dev/null
+pushd "${VIRTUAL_ENV}/.." > /dev/null
 
 python -m black -l 100 localizedstringkit/*.py tests/*.py
 
