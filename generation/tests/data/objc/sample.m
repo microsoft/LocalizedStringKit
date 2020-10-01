@@ -42,3 +42,6 @@ Localized(@"First special token: \n and second special token: \"", @"This value 
 
 // 13. Should localize with `value`, `comment`, and `bundle`
 LocalizedWithBundle(@"Another value", @"Some comment", @"info.bundle")
+
+// 14. Should localize with `value`, `comment`, `key_extension` and `bundle`
+LocalizedWithKeyExtensionAndBundle(@"Another value", @"Some comment", @"Verb", @"info.bundle")

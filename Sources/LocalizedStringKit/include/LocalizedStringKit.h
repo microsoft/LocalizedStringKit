@@ -46,11 +46,21 @@ NSString *LocalizedWithBundle(NSString *_Nonnull value, NSString *_Nonnull comme
 /// @param value: The English string
 /// @param comment: String to give context where the value string is used
 /// @param keyExtension: String to be used to provide additional differentiation between contexts. The `keyExtension` is included when generating the string `key` so two calls with the same `value` but different `keyExtension` values will result in two different strings in the localization dictionary
+///
+/// Ex: `LocalizedWithKeyExtension("Archive", "Button title", "Verb")
+/// Ex: `LocalizedWithKeyExtension("Archive", "Folder title", "Noun")
+NSString *LocalizedWithKeyExtension(NSString *_Nonnull value, NSString *_Nonnull scomment, NSString *_Nonnull keyExtension);
+
+/// Additional localization function used to localize strings
+///
+/// @param value: The English string
+/// @param comment: String to give context where the value string is used
+/// @param keyExtension: String to be used to provide additional differentiation between contexts. The `keyExtension` is included when generating the string `key` so two calls with the same `value` but different `keyExtension` values will result in two different strings in the localization dictionary
 /// @param bundleName: Optional string to provide additional classification of the string. Can be used to segment groups of strings in multiple bundles.
 ///
-/// Ex: `LocalizedWithKeyExtension("Archive", "Button title", "Archive action", nil)
-/// Ex: `LocalizedWithKeyExtension("Archive", "Folder title", "Archive folder", nil)
-NSString *LocalizedWithKeyExtension(NSString *_Nonnull value, NSString *_Nonnull scomment, NSString *_Nonnull keyExtension, NSString *_Nullable bundleName);
+/// Ex: `LocalizedWithKeyExtensionAndBundle("Archive", "Button title", "Verb", "primary")
+/// Ex: `LocalizedWithKeyExtensionAndBundle("Archive", "Folder title", "Noun", "primary")
+NSString *LocalizedWithKeyExtensionAndBundle(NSString *_Nonnull value, NSString *_Nonnull scomment, NSString *_Nonnull keyExtension, NSString *_Nullable bundleName);
 
 /// Marks a string as not needing localization (to avoid false positives from
 /// the static analyzer

@@ -28,8 +28,12 @@ NSString *LocalizedWithBundle(NSString *_Nonnull value, NSString *_Nonnull comme
   return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:nil bundleName:bundleName];
 }
 
-NSString *LocalizedWithKeyExtension(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull keyExtension, NSString *_Nullable bundleName) {
-  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension bundleName:bundleName];
+NSString *LocalizedWithKeyExtension(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull keyExtension) {
+  return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension bundleName:nil];
+}
+
+NSString *LocalizedWithKeyExtensionAndBundle(NSString *_Nonnull value, NSString *_Nonnull comment, NSString *_Nonnull keyExtension, NSString *_Nullable bundleName) {
+    return [LocalizedStringKit localizeWithValue:value comment:comment keyExtension:keyExtension bundleName:bundleName];
 }
 
 __attribute__((annotate("returns_localized_nsstring")))

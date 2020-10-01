@@ -59,6 +59,12 @@ class BasicTestSuite(unittest.TestCase):
                 "skip_value": True,
             },
             {"text": "Another value", "comment": "Some comment", "bundle": "info.bundle"},
+            {
+                "text": "Another value",
+                "comment": "Some comment",
+                "extension": "Verb",
+                "bundle": "info.bundle",
+            },
         ]
 
         self.assertEqual(len(detected_strings) - 1, len(expectation_list))
@@ -78,7 +84,7 @@ class BasicTestSuite(unittest.TestCase):
         # backslashes. It just gets the regular string `Hello "World"`.
         # So we can't always determine the string Swift will have.
 
-        for expectation in expectation_list:
+        for index, expectation in enumerate(expectation_list):
 
             text = expectation["text"]
             if "extension" in expectation:
@@ -87,7 +93,7 @@ class BasicTestSuite(unittest.TestCase):
 
             string = strings[key]
 
-            if expectation == expectation_list[-1]:
+            if index > 10:
                 self.assertEqual(string.bundle, "info.bundle")
             else:
                 self.assertEqual(string.bundle, "LocalizedStringKit.bundle")
