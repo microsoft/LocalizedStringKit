@@ -30,6 +30,35 @@ final class LocalizedStringKitTests: XCTestCase {
       }
     }
 
+    func testLocalizedWithKeyExtension() {
+        guard Locale.current.languageCode == "en" else {
+            XCTFail("Please add other development language localization tests")
+            return
+        }
+        XCTAssertEqual(LocalizedWithKeyExtension("Open", "Open", "Open is a verb"), "Open")
+        XCTAssertEqual(
+            LocalizedWithKeyExtensionAndBundle(
+            "Open",
+                "Open",
+                "Open is a verb",
+                "informationn"
+            ),
+            "Open"
+        )
+    }
+
+    func testLocalizedWithBundle() {
+        guard Locale.current.languageCode == "en" else {
+            XCTFail("Please add other development language localization tests")
+            return
+        }
+        XCTAssertEqual(LocalizedWithBundle("Open", "Open", "info"), "Open")
+    }
+
+    func testGetLocalizedStringKitBundle() {
+        XCTAssertNil(getLocalizedStringKitBundle("unknown_bundle"))
+    }
+
     func testPrimaryBundleName() {
       XCTAssertEqual(LSKPrimaryBundleName, "LocalizedStringKit.bundle")
       LSKSetPrimaryBundleName("Other.bundle")
