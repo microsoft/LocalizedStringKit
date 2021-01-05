@@ -20,13 +20,11 @@ final class LocalizedStringKitTests: XCTestCase {
       if Locale.current.languageCode == "en" {
         XCTAssertEqual(Localized("Done", "Done"), "Done")
         XCTAssertEqual(Localized("Not a Localized String", "Done"), "Not a Localized String")
-        XCTAssertEqual(LocalizationUnnecessary("Not Needed"), "Not Needed")
       }
       else {
         XCTFail("Please add other development language localization tests")
         XCTAssertEqual(Localized("Done", "Done"), "Done")
         XCTAssertEqual(LocalizedWithBundle("Not a Localized String", "Done", "primary"), "Not a Localized String")
-        XCTAssertEqual(LocalizationUnnecessary("Not Needed"), "Not Needed")
       }
     }
 
@@ -56,19 +54,19 @@ final class LocalizedStringKitTests: XCTestCase {
     }
 
     func testGetLocalizedStringKitBundle() {
-        XCTAssertNil(getLocalizedStringKitBundle("unknown_bundle"))
+        XCTAssertNil(LocalizedStringKit.getBundle("unknown_bundle"))
     }
 
     func testPrimaryBundleName() {
-      XCTAssertEqual(LSKPrimaryBundleName, "LocalizedStringKit.bundle")
-      LSKSetPrimaryBundleName("Other.bundle")
-      XCTAssertEqual(LSKPrimaryBundleName, "Other.bundle")
+      XCTAssertEqual(LocalizedStringKit.primaryBundleName, "LocalizedStringKit.bundle")
+      LocalizedStringKit.primaryBundleName = "Other.bundle"
+      XCTAssertEqual(LocalizedStringKit.primaryBundleName, "Other.bundle")
     }
 
   func testAlternateBundleSearchPath() {
-    XCTAssertNil(LSKAlternateBundleSearchPath)
-    LSKAlternateBundleSearchPath = NSURL(string: "file://path")
-    XCTAssertEqual(LSKAlternateBundleSearchPath, NSURL(string: "file://path"))
+    XCTAssertNil(LocalizedStringKit.alternateBundleSearchPath)
+    LocalizedStringKit.alternateBundleSearchPath = URL(string: "file://path")
+    XCTAssertEqual(LocalizedStringKit.alternateBundleSearchPath, URL(string: "file://path"))
   }
 
   // TODO: LocalizedStringKit statically binds the Locale bundle so we cannot swap locale at runtime, if we need to

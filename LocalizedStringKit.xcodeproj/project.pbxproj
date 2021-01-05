@@ -21,8 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		OBJ_32 /* LocalizedStringKit.m in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* LocalizedStringKit.m */; };
-		OBJ_34 /* LocalizedStringKit.h in Headers */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* LocalizedStringKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DD90F1BF25A47E1C006C2ED8 /* LocalizedStringKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90F1BE25A47E1C006C2ED8 /* LocalizedStringKit.swift */; };
 		OBJ_41 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_52 /* LocalizedStringKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* LocalizedStringKitTests.swift */; };
 		OBJ_53 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* XCTestManifests.swift */; };
@@ -47,14 +46,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DD90F1BE25A47E1C006C2ED8 /* LocalizedStringKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStringKit.swift; sourceTree = "<group>"; };
 		"LocalizedStringKit::LocalizedStringKit::Product" /* LocalizedStringKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LocalizedStringKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"LocalizedStringKit::LocalizedStringKitTests::Product" /* LocalizedStringKitTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = LocalizedStringKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		OBJ_11 /* LocalizedStringKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizedStringKit.h; sourceTree = "<group>"; };
-		OBJ_14 /* LocalizedStringKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStringKitTests.swift; sourceTree = "<group>"; };
+		"LocalizedStringKit::LocalizedStringKitTests::Product" /* LocalizedStringKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = LocalizedStringKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_14 /* LocalizedStringKitTests.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalizedStringKitTests.swift; sourceTree = "<group>"; tabWidth = 2; };
 		OBJ_15 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		OBJ_25 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		OBJ_9 /* LocalizedStringKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizedStringKit.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,14 +74,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		OBJ_10 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				OBJ_11 /* LocalizedStringKit.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
 		OBJ_12 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,8 +123,7 @@
 		OBJ_8 /* LocalizedStringKit */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_9 /* LocalizedStringKit.m */,
-				OBJ_10 /* include */,
+				DD90F1BE25A47E1C006C2ED8 /* LocalizedStringKit.swift */,
 			);
 			name = LocalizedStringKit;
 			path = Sources/LocalizedStringKit;
@@ -147,7 +136,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_34 /* LocalizedStringKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +198,11 @@
 			attributes = {
 				LastSwiftMigration = 9999;
 				LastUpgradeCheck = 9999;
+				TargetAttributes = {
+					"LocalizedStringKit::LocalizedStringKit" = {
+						LastSwiftMigration = 1220;
+					};
+				};
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "LocalizedStringKit" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -236,7 +229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_32 /* LocalizedStringKit.m in Sources */,
+				DD90F1BF25A47E1C006C2ED8 /* LocalizedStringKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,9 +282,9 @@
 					"$(SRCROOT)/Sources/LocalizedStringKit/include",
 				);
 				INFOPLIST_FILE = LocalizedStringKit.xcodeproj/LocalizedStringKit_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -300,9 +293,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGET_NAME = LocalizedStringKit;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Debug;
 		};
@@ -351,9 +346,9 @@
 					"$(SRCROOT)/Sources/LocalizedStringKit/include",
 				);
 				INFOPLIST_FILE = LocalizedStringKit.xcodeproj/LocalizedStringKit_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -362,9 +357,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
 				TARGET_NAME = LocalizedStringKit;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Release;
 		};
@@ -429,6 +425,7 @@
 		OBJ_49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -440,23 +437,24 @@
 					"$(SRCROOT)/Sources/LocalizedStringKit/include",
 				);
 				INFOPLIST_FILE = LocalizedStringKit.xcodeproj/LocalizedStringKitTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
 				TARGET_NAME = LocalizedStringKitTests;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Debug;
 		};
 		OBJ_50 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -468,17 +466,17 @@
 					"$(SRCROOT)/Sources/LocalizedStringKit/include",
 				);
 				INFOPLIST_FILE = LocalizedStringKit.xcodeproj/LocalizedStringKitTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
 				TARGET_NAME = LocalizedStringKitTests;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Release;
 		};
