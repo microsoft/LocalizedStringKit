@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LocalizedStringKit'
-  s.version          = '0.2.4'
+  s.version          = '0.2.5'
   s.summary          = 'Generate .strings files directly from your code'
 
   s.description      = <<-DESC
@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
 
   s.source_files = 'Sources/LocalizedStringKit/**/*'
-  
+
   s.public_header_files = 'Sources/LocalizedStringKit/include/**/*.h'
 end
