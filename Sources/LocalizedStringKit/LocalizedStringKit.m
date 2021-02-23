@@ -64,7 +64,7 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
   if (bundleName == nil)
   {
     // Default to primary strings bundle
-    bundleName = @"LocalizedStringKit.bundle";
+    bundleName = LSKPrimaryBundleName;
   }
 
   NSBundle *bundle = [bundleMap objectForKey:bundleName];
