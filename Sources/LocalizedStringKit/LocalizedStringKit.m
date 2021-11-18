@@ -104,7 +104,7 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
   const char *inputCharacterArray = [hashInput UTF8String];
   unsigned char outputCharacterArray[CC_MD5_DIGEST_LENGTH];
 
-  CC_MD5(inputCharacterArray, (CC_LONG)strlen(inputCharacterArray), outputCharacterArray);
+  CC_MD5(inputCharacterArray, (CC_LONG)strnlen(inputCharacterArray, sizeof inputCharacterArray), outputCharacterArray);
 
   NSMutableString *key = [[NSMutableString alloc] init];
 
