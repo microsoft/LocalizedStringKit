@@ -1,8 +1,10 @@
 
 jobs:
 
-    - job: 'Build and Test Generation Tool'
-      pool: 'Hosted macOS'
+    - job:
+      displayName: 'Build and Test Generation Tool'
+      pool:
+        vmImage: 'macOS-latest'
       strategy:
         matrix:
           Python37:
