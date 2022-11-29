@@ -62,7 +62,7 @@ jobs:
       - script: |
           source bin/activate
           cd generation
-          $HOME/.poetry/bin/poetry install
+          $HOME/.local/bin/poetry install
         displayName: 'Install dependencies'
     
       - script: |
