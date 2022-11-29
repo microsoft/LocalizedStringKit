@@ -7,8 +7,12 @@ jobs:
         vmImage: 'macOS-latest'
       strategy:
         matrix:
-          Python37:
-            python.version: '3.7'
+          Python38:
+            python.version: '3.8'
+          Python39:
+            python.version: '3.9'
+          Python310:
+            python.version: '3.10'
         maxParallel: 4
     
       steps:
@@ -17,35 +21,33 @@ jobs:
           versionSpec: '$(python.version)'
           architecture: 'x64'
     
-      - script: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-        displayName: Install Poetry
-    
-      - script: python -m venv $(System.DefaultWorkingDirectory)
+      - script: python3 -m venv $(System.DefaultWorkingDirectory)
         displayName: Create virtual environment
     
       - script: |
           source bin/activate
-          $HOME/.poetry/bin/poetry install
-        displayName: 'Install dependencies'
+          curl -sSL https://install.python-poetry.org | python3 -
+          $HOME/.local/bin/poetry install
+        displayName: 'Install Poetry'
     
       - script: |
           source bin/activate
-          python -m black -l 100 --check localizedstringkit/*.py tests/*.py
+          python3 -m black -l 100 --check localizedstringkit/*.py tests/*.py
         displayName: 'Format Check (Black)'
     
       - script: |
           source bin/activate
-          python -m pylint --rcfile=pylintrc localizedstringkit tests
+          python3 -m pylint --rcfile=pylintrc localizedstringkit tests
         displayName: 'Lint'
     
       - script: |
           source bin/activate
-          python -m mypy --ignore-missing-imports localizedstringkit/ tests/
+          python3 -m mypy --ignore-missing-imports localizedstringkit/ tests/
         displayName: 'Type Check'
     
       - script: |
           source bin/activate
-          python -m pytest tests --cov=localizedstringkit --cov-report xml --doctest-modules --junitxml=junit/test-results.xml
+          python3 -m pytest tests --cov=localizedstringkit --cov-report xml --doctest-modules --junitxml=junit/test-results.xml
         displayName: 'pytest'
     
       - task: PublishTestResults@2
