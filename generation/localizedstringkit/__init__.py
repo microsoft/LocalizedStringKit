@@ -25,10 +25,11 @@ from localizedstringkit.files import localizable_files
 log = logger.get()
 
 
-def get_strings(code_files: List[str]) -> Tuple[dict, dict]:
+def get_strings(code_files: List[str], generate_stringsdict_entires: bool) -> Tuple[dict, dict]:
     """Scan and get strings per bundle.
 
     :param code_files: The list of file paths to generate the code strings for
+    :param bool generate_stringsdict_entires: Whether or not to generate stringsdict entries based on regex
 
     :returns: A tuple with first value as the bundle name to normal strings list, the second value as the bundle name to plural strings
     """
@@ -45,8 +46,8 @@ def get_strings(code_files: List[str]) -> Tuple[dict, dict]:
 
     for localized_string in localized_strings:
         matches = stringsdict_pattern.findall(localized_string.value)
-        if matches is None or len(matches) == 0:
-            # No match for plural pattern, added to normal strings
+        if not generate_stringsdict_entires or matches is None or len(matches) == 0:
+            # No match for plural pattern or not asked to generate stringsdict entries, added to normal strings
             normal_strings[localized_string.bundle].append(localized_string)
             continue
 
@@ -62,15 +63,20 @@ def get_strings(code_files: List[str]) -> Tuple[dict, dict]:
     return (normal_strings, plural_strings)
 
 
-def generate_code_strings_file(code_files: List[str]) -> Tuple[dict, dict]:
+def generate_code_strings_file(
+    code_files: List[str], generate_stringsdict_entires: bool
+) -> Tuple[dict, dict]:
     """Generate a single code file with all strings per bundle.
 
     :param code_files: The list of file paths to generate the code strings for
+    :param bool generate_stringsdict_entires: Whether or not to generate stringsdict entries based on regex
 
     :returns: A tuple with first as the bundle name to the path to the temporary source code file with the standard NSLocalizedString, the second as the bundle name to plural strings
     """
 
-    normal_strings_by_bundle, plural_strings_by_bundle = get_strings(code_files)
+    normal_strings_by_bundle, plural_strings_by_bundle = get_strings(
+        code_files, generate_stringsdict_entires
+    )
 
     strings_bundles = normal_strings_by_bundle.keys()
 
@@ -131,29 +137,37 @@ def create_or_merge_stringsdict_file(
             entry.merge(existing_entry)
         results[entry.key] = entry.stringsdict_format()
 
-    with open(existing_stringsdict_path, "wb", encoding="utf-8") as stringsdict_file:
+    with open(existing_stringsdict_path, "wb") as stringsdict_file:
         plistlib.dump(results, stringsdict_file, sort_keys=True)
 
 
-def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_path: str) -> None:
+def generate_files(
+    code_files: List[str], localized_string_kit_path: str, generate_stringsdict_files: bool
+) -> None:
     """Run the localization substitution process.
 
     :param List[str] code_files: The list of file paths to generate the .strings
-                                 for.
+                                  and .stringsdict for.
     :param str localized_string_kit_path: Path to the LocalizedStringsKit
                                            folder which contains the strings
                                            bundle and other library data.
+    :param bool generate_stringsdict_files: Whether or not to generate stringsdict files.
 
-    :raises Exception: If we can't generate the .strings files
+    :raises Exception: If we can't generate the .strings/.stringdict files
     """
 
-    log.info("Generating LocalizedStringKit.strings and LocalizedStringKit.stringsdict...")
+    if generate_stringsdict_files:
+        log.info("Generating LocalizedStringKit.strings and LocalizedStringKit.stringsdict...")
+    else:
+        log.info("Generating LocalizedStringKit.strings...")
 
     code_strings_file: Optional[dict] = None
 
     # Generate a .m file per unique bundle with all NSLocalizedStrings in it if we haven't
     # been given files explicitly
-    code_strings_file, stringsdict_by_bundle = generate_code_strings_file(code_files)
+    code_strings_file, stringsdict_by_bundle = generate_code_strings_file(
+        code_files, generate_stringsdict_files
+    )
 
     # Iterate through output_paths dictionary and generate strings for each bundle
     for bundle_name, path in code_strings_file.items():
@@ -192,6 +206,36 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
 
     # Success
     log.info("Generation complete")
+
+
+def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_path: str) -> None:
+    """Run the localization substitution process only creating .strings files.
+
+    :param List[str] code_files: The list of file paths to generate the .strings
+                                 for.
+    :param str localized_string_kit_path: Path to the LocalizedStringsKit
+                                           folder which contains the strings
+                                           bundle and other library data.
+
+    :raises Exception: If we can't generate the .strings files
+    """
+
+    generate_files(code_files, localized_string_kit_path, False)
+
+
+def generate_all_files(*, code_files: List[str], localized_string_kit_path: str) -> None:
+    """Run the localization substitution process only creating .strings files.
+
+    :param List[str] code_files: The list of file paths to generate the .strings
+                                 and .stringsdict for.
+    :param str localized_string_kit_path: Path to the LocalizedStringsKit
+                                           folder which contains the strings
+                                           bundle and other library data.
+
+    :raises Exception: If we can't generate the .strings or .stringsdict files
+    """
+
+    generate_files(code_files, localized_string_kit_path, True)
 
 
 def has_strings_dict_changes(localized_string_kit_path: str, stringsdict_by_bundle: dict) -> bool:
@@ -246,13 +290,17 @@ def has_strings_dict_changes(localized_string_kit_path: str, stringsdict_by_bund
     return False
 
 
-def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> bool:
+def has_changes(
+    *, localized_string_kit_path: str, code_files: List[str], including_stringsdict_files=False
+) -> bool:
     """Check if there are outstanding LocalizedStringKit changes.
 
     :param str localized_string_kit_path: Path to the LocalizedStringsKit
                                           folder which contains the strings
                                           bundle and other library data.
     :param List[str] code_files: The list of file paths to check for changes to.
+    :param bool including_stringsdict_files: Whether or not to check stringsdict
+                                             changes as well
 
     :returns: True if there are changes, False otherwise
     """
@@ -260,7 +308,9 @@ def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> boo
     log.info("Determining if localization needs run")
 
     # Generate current code file paths; Dict of bundle: output_path
-    current_strings_paths, stringsdict_by_bundle = generate_code_strings_file(code_files)
+    current_strings_paths, stringsdict_by_bundle = generate_code_strings_file(
+        code_files, including_stringsdict_files
+    )
 
     for bundle, path in current_strings_paths.items():
         m_file = bundle.replace(".bundle", ".m")
@@ -281,6 +331,9 @@ def has_changes(*, localized_string_kit_path: str, code_files: List[str]) -> boo
 
         if files_differ:
             return True
+
+    if not including_stringsdict_files:
+        return False
 
     return has_strings_dict_changes(
         localized_string_kit_path,

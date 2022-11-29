@@ -1,8 +1,10 @@
 """Test basic features."""
 
+import filecmp
 import hashlib
 import os
 import sys
+import tempfile
 from typing import Any, Dict, List
 import unittest
 
@@ -65,6 +67,12 @@ class BasicTestSuite(unittest.TestCase):
                 "extension": "Verb",
                 "bundle": "info.bundle",
             },
+            {"text": "%#@firstValue@ and %#@secondValue@", "comment": "Some comment"},
+            {
+                "text": "%#@firstValue@ and %#@secondValue@",
+                "comment": "Some comment",
+                "bundle": "info.bundle",
+            },
         ]
 
         self.assertEqual(len(detected_strings) - 1, len(expectation_list))
@@ -106,38 +114,66 @@ class BasicTestSuite(unittest.TestCase):
                 self.assertEqual(string.value, expectation.get("text"))
 
     def check_generated_source_matches(
-        self, code_file: str, expectations_file: str, language_hint: str
+        self, code_file: str, expectations_output_directory: str, language_hint: str
     ) -> None:
         """Test that the generated source file matches.
 
         :param code_file: The code file to get the strings from
-        :param expectations_file: The file we expect to match
+        :param expectations_output_directory: The directory to compare to
         :param language_hint: A debug string to show what language this is running for
         """
 
-        detected_strings = localizedstringkit.detection.strings_in_code_file(code_file)
-        samples = [string.ns_localized_format() for string in detected_strings]
-        samples.sort()
-
-        with open(expectations_file, encoding="utf-8") as expectations_handle:
-            expectations = expectations_handle.readlines()
-
-        expectations = list(map(lambda x: x.strip(), expectations))
-        expectations = list(filter(lambda x: len(x) > 0, expectations))
-        expectations.sort()
-
-        self.assertEqual(
-            len(samples),
-            len(expectations),
-            f"Mismatch in cases for {language_hint} {len(samples)} != {len(expectations)}",
+        temp_dir = tempfile.mkdtemp()
+        localizedstringkit.generate_all_files(
+            code_files=[code_file], localized_string_kit_path=temp_dir
         )
 
-        for sample, expectation in zip(samples, expectations):
-            self.assertEqual(
-                sample,
-                expectation,
-                f"Tests failed for {language_hint} case: {sample} -> {expectation}",
+        for bundle in os.listdir(temp_dir):
+            if not bundle.endswith(".bundle"):
+                continue
+
+            generated_bundle_path = os.path.join(temp_dir, bundle)
+            expectations_bundle_path = os.path.join(expectations_output_directory, bundle)
+
+            self.assertTrue(
+                os.path.exists(expectations_bundle_path),
+                f"Mismatch in cases for {language_hint}, {expectations_bundle_path} not found",
             )
+
+            generated_m_path = os.path.join(temp_dir, bundle.replace(".bundle", ".m"))
+            expectations_m_path = os.path.join(
+                expectations_output_directory, bundle.replace(".bundle", ".m")
+            )
+
+            self.assertTrue(
+                os.path.exists(expectations_m_path),
+                f"Mismatch in cases for {language_hint}, {expectations_m_path} not found",
+            )
+            self.assertTrue(
+                os.path.exists(generated_m_path),
+                f"Mismatch in cases for {language_hint}, {generated_m_path} not found",
+            )
+
+            self.assertTrue(
+                filecmp.cmp(generated_m_path, expectations_m_path),
+                f"Mismatch in cases for {language_hint}, {generated_m_path} has different content then expected in {expectations_m_path}",
+            )
+
+            for file_name in ["LocalizedStringKit.strings", "LocalizedStringKit.stringsdict"]:
+                generated_file_path = os.path.join(generated_bundle_path, "en.lproj", file_name)
+                expectations_file_path = os.path.join(
+                    expectations_bundle_path, "en.lproj", file_name
+                )
+
+                if os.path.exists(generated_file_path):
+                    self.assertTrue(
+                        os.path.exists(expectations_file_path),
+                        f"Mismatch in cases for {language_hint}, {generated_file_path} not found",
+                    )
+                    self.assertTrue(
+                        filecmp.cmp(generated_file_path, expectations_file_path),
+                        f"Mismatch in cases for {language_hint}, {generated_file_path} has different content then expected in {expectations_file_path}",
+                    )
 
     def test_swift_detection_script(self) -> None:
         """Test that Swift strings are detected."""
@@ -148,7 +184,7 @@ class BasicTestSuite(unittest.TestCase):
 
         self.check_generated_source_matches(
             os.path.join(self.data_path, "swift", "sample.swift"),
-            os.path.join(self.data_path, "swift", "expectation.m"),
+            os.path.join(self.data_path, "swift", "expectation"),
             "Swift",
         )
 
@@ -162,6 +198,6 @@ class BasicTestSuite(unittest.TestCase):
 
         self.check_generated_source_matches(
             os.path.join(self.data_path, "objc", "sample.m"),
-            os.path.join(self.data_path, "objc", "expectation.m"),
-            "Swift",
+            os.path.join(self.data_path, "objc", "expectation"),
+            "ObjC",
         )

@@ -45,3 +45,7 @@ LocalizedWithBundle("Another value", "Some comment", "info.bundle")
 
 // 14. Should localize with `value`, `comment`, `key_extension` and `bundle`
 LocalizedWithKeyExtensionAndBundle("Another value", "Some comment", "Verb", "info.bundle")
+
+Localized("%#@firstValue@ and %#@secondValue@", "Some comment")
+
+LocalizedWithBundle("%#@firstValue@ and %#@secondValue@", "Some comment", "info.bundle")
