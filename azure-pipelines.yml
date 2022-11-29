@@ -26,27 +26,32 @@ jobs:
     
       - script: |
           source bin/activate
+          cd generation
           curl -sSL https://install.python-poetry.org | python3 -
           $HOME/.local/bin/poetry install
         displayName: 'Install Poetry'
     
       - script: |
           source bin/activate
+          cd generation
           python3 -m black -l 100 --check localizedstringkit/*.py tests/*.py
         displayName: 'Format Check (Black)'
     
       - script: |
           source bin/activate
+          cd generation
           python3 -m pylint --rcfile=pylintrc localizedstringkit tests
         displayName: 'Lint'
     
       - script: |
           source bin/activate
+          cd generation
           python3 -m mypy --ignore-missing-imports localizedstringkit/ tests/
         displayName: 'Type Check'
     
       - script: |
           source bin/activate
+          cd generation
           python3 -m pytest tests --cov=localizedstringkit --cov-report xml --doctest-modules --junitxml=junit/test-results.xml
         displayName: 'pytest'
     
@@ -60,4 +65,4 @@ jobs:
       - task: PublishCodeCoverageResults@1
         inputs:
           codeCoverageTool: 'cobertura'
-          summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage.xml
+          summaryFileLocation: $(System.DefaultWorkingDirectory)/generation/coverage.xml
