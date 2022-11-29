@@ -53,7 +53,7 @@ def generate_code_strings_file(code_files: List[str]) -> dict:
     for bundle, path in output_paths.items():
         log.debug(f"Writing temporary source file at {path} for bundle {bundle}")
 
-        with open(path, "w") as temporary_source_file:
+        with open(path, "w", encoding="utf-8") as temporary_source_file:
             strings: List = string_map[bundle]
             if strings is not None:
                 for localized_string in strings:
@@ -91,7 +91,8 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
             name = bundle_name + ".bundle"
 
         generate_strings(
-            output_directory=os.path.join(localized_string_kit_path, name), file_paths=[path],
+            output_directory=os.path.join(localized_string_kit_path, name),
+            file_paths=[path],
         )
 
         # We need to track the code file as well so that we can tell if things
