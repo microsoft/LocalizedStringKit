@@ -93,7 +93,7 @@ def _handle_arguments() -> int:
         )
 
     if args.exclusion_file is not None:
-        with open(args.exclusion_file) as exclusion_file:
+        with open(args.exclusion_file, encoding="utf-8") as exclusion_file:
             exclusions = list(map(lambda s: s.strip(), exclusion_file.readlines()))
     elif args.exclude is not None:
         exclusions = args.exclude

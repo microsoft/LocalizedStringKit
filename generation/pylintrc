@@ -14,7 +14,7 @@ load-plugins=pylint.extensions.docparams,pylint.extensions.docstyle,pylint.exten
 accept-no-param-doc=no
 accept-no-raise-doc=no
 accept-no-return-doc=no
-accept-no-yeilds-doc=no
+accept-no-yields-doc=no
 
 # pylint.extensions.mccabe options
 max-complexity=12
@@ -48,9 +48,7 @@ include-naming-hint=yes
 # Methods and functions can have names up to 50 characters. We need this on
 # occasion for internal methods doing complex things.
 method-rgx=[a-z_][a-z0-9_]{2,50}$
-method-name-hint=[a-z_][a-z0-9_]{2,50}$
 function-rgx=[a-z_][a-z0-9_]{2,50}$
-fuction-name-hint=[a-z_][a-z0-9_]{2,50}$
 
 # Increase from 7. 7 isn't enough to encapsulate everything we need for working 
 # with various APIs.

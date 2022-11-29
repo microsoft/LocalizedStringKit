@@ -31,7 +31,7 @@ class Detector:
         """
         self.file_path = file_path
 
-        with open(file_path, "r") as file_contents:
+        with open(file_path, "r", encoding="utf-8") as file_contents:
             self.contents = "".join(file_contents.readlines())
 
         self.sanitized_contents = self.contents.replace(

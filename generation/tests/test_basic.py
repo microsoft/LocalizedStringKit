@@ -119,7 +119,7 @@ class BasicTestSuite(unittest.TestCase):
         samples = [string.ns_localized_format() for string in detected_strings]
         samples.sort()
 
-        with open(expectations_file) as expectations_handle:
+        with open(expectations_file, encoding="utf-8") as expectations_handle:
             expectations = expectations_handle.readlines()
 
         expectations = list(map(lambda x: x.strip(), expectations))
