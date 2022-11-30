@@ -142,7 +142,7 @@ def create_or_merge_stringsdict_file(
 
 
 def generate_files(
-    code_files: List[str], localized_string_kit_path: str, generate_stringsdict_files: bool
+    *, code_files: List[str], localized_string_kit_path: str, generate_stringsdict_files: bool
 ) -> None:
     """Run the localization substitution process.
 
@@ -220,22 +220,11 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
     :raises Exception: If we can't generate the .strings files
     """
 
-    generate_files(code_files, localized_string_kit_path, False)
-
-
-def generate_all_files(*, code_files: List[str], localized_string_kit_path: str) -> None:
-    """Run the localization substitution process only creating .strings files.
-
-    :param List[str] code_files: The list of file paths to generate the .strings
-                                 and .stringsdict for.
-    :param str localized_string_kit_path: Path to the LocalizedStringsKit
-                                           folder which contains the strings
-                                           bundle and other library data.
-
-    :raises Exception: If we can't generate the .strings or .stringsdict files
-    """
-
-    generate_files(code_files, localized_string_kit_path, True)
+    generate_files(
+        code_files=code_files,
+        localized_string_kit_path=localized_string_kit_path,
+        generate_stringsdict_files=False,
+    )
 
 
 def has_strings_dict_changes(localized_string_kit_path: str, stringsdict_by_bundle: dict) -> bool:

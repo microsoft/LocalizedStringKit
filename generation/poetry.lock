@@ -107,11 +107,11 @@ graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
 name = "dotstrings"
-version = "1.1.2"
+version = "1.1.3"
 description = "Tools for dealing with the .strings files for iOS and macOS"
 category = "main"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7.2,<4.0.0"
 
 [[package]]
 name = "exceptiongroup"
@@ -378,7 +378,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "6304b90d53400f7eca96e01c6719e982f82358e8b450cf8e003658b396de4013"
+content-hash = "5f356834da2a6bcca6c1d9f09be4fa5822d5d009f9e0dbe595e606a00f6d5e60"
 
 [metadata.files]
 astroid = [
@@ -481,8 +481,8 @@ dill = [
     {file = "dill-0.3.6.tar.gz", hash = "sha256:e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373"},
 ]
 dotstrings = [
-    {file = "dotstrings-1.1.2-py3-none-any.whl", hash = "sha256:451f9f8ff963990f0e6ec55c07c9581b6c70438a10e91530e93d02912cf14cd9"},
-    {file = "dotstrings-1.1.2.tar.gz", hash = "sha256:66afe7f3d50e46edb2cf7ef6d6942bbd899201e05449a78b44366d09caa3e9e9"},
+    {file = "dotstrings-1.1.3-py3-none-any.whl", hash = "sha256:dca3c3aeb020246d0b1fd9117fc410954f8bfc8b19fed4fc81e77e20529c8920"},
+    {file = "dotstrings-1.1.3.tar.gz", hash = "sha256:23c9e35181133fe631cadb90db6021c01e6216caa536f2dbdb82bbfe1845a9e2"},
 ]
 exceptiongroup = [
     {file = "exceptiongroup-1.0.4-py3-none-any.whl", hash = "sha256:542adf9dea4055530d6e1279602fa5cb11dab2395fa650b8674eaec35fc4a828"},

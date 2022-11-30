@@ -124,8 +124,10 @@ class BasicTestSuite(unittest.TestCase):
         """
 
         temp_dir = tempfile.mkdtemp()
-        localizedstringkit.generate_all_files(
-            code_files=[code_file], localized_string_kit_path=temp_dir
+        localizedstringkit.generate_files(
+            code_files=[code_file],
+            localized_string_kit_path=temp_dir,
+            generate_stringsdict_files=True,
         )
 
         for bundle in os.listdir(temp_dir):
