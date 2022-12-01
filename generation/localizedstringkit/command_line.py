@@ -40,6 +40,14 @@ def _handle_arguments() -> int:
         default=False,
         help="Perform a check to see if localize needs run or not",
     )
+    parser.add_argument(
+        "-g",
+        "--generate-stringsdict-files",
+        dest="generate_stringsdict_files",
+        action="store_true",
+        default=False,
+        help="Generate stringsdict file based on the string content or not",
+    )
 
     parser.add_argument(
         "-p",
@@ -111,16 +119,22 @@ def _handle_arguments() -> int:
     try:
         if args.check:
             if localizedstringkit.has_changes(
-                localized_string_kit_path=args.localized_string_kit_path, code_files=code_files
+                localized_string_kit_path=args.localized_string_kit_path,
+                code_files=code_files,
+                including_stringsdict_files=args.generate_stringsdict_files,
             ):
                 log.info("There are string changes. Please run `olm localize`")
                 return 1
         else:
             if args.force or localizedstringkit.has_changes(
-                localized_string_kit_path=args.localized_string_kit_path, code_files=code_files
+                localized_string_kit_path=args.localized_string_kit_path,
+                code_files=code_files,
+                including_stringsdict_files=args.generate_stringsdict_files,
             ):
-                localizedstringkit.generate_dot_strings_files(
-                    code_files=code_files, localized_string_kit_path=args.localized_string_kit_path
+                localizedstringkit.generate_files(
+                    code_files=code_files,
+                    localized_string_kit_path=args.localized_string_kit_path,
+                    generate_stringsdict_files=args.generate_stringsdict_files,
                 )
     except localizedstringkit.InvalidLocalizedCallException as ex:
         log.error(ex)
