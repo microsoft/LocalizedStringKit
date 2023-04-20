@@ -44,9 +44,7 @@ def localizable_files(
         raise Exception("Either excluded_folders or exclusion_file_path should be set")
     elif exclusion_file_path is not None:
         with open(exclusion_file_path, encoding="utf-8") as exclusion_file:
-            excluded_folders = list(
-                map(lambda x: x.strip(), exclusion_file.readlines())
-            )
+            excluded_folders = list(map(lambda x: x.strip(), exclusion_file.readlines()))
 
     assert excluded_folders is not None
 

@@ -138,9 +138,7 @@ class BasicTestSuite(unittest.TestCase):
                 continue
 
             generated_bundle_path = os.path.join(temp_dir, bundle)
-            expectations_bundle_path = os.path.join(
-                expectations_output_directory, bundle
-            )
+            expectations_bundle_path = os.path.join(expectations_output_directory, bundle)
 
             self.assertTrue(
                 os.path.exists(expectations_bundle_path),
@@ -170,9 +168,7 @@ class BasicTestSuite(unittest.TestCase):
                 "LocalizedStringKit.strings",
                 "LocalizedStringKit.stringsdict",
             ]:
-                generated_file_path = os.path.join(
-                    generated_bundle_path, "en.lproj", file_name
-                )
+                generated_file_path = os.path.join(generated_bundle_path, "en.lproj", file_name)
                 expectations_file_path = os.path.join(
                     expectations_bundle_path, "en.lproj", file_name
                 )
@@ -189,9 +185,7 @@ class BasicTestSuite(unittest.TestCase):
 
     def test_swift_detection_script(self) -> None:
         """Test that Swift strings are detected."""
-        self.check_string_detection(
-            os.path.join(self.data_path, "swift", "sample.swift")
-        )
+        self.check_string_detection(os.path.join(self.data_path, "swift", "sample.swift"))
 
     def test_localize_script_swift(self) -> None:
         """Test that the localization script can execute successfully."""
