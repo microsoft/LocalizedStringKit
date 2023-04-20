@@ -55,7 +55,17 @@ def localizable_files(
     results = []
 
     # Execute find commands
-    find_cmd = ["find", root_path, "-type", "f", "-name", "*.swift", "-o", "-name", "*.m"]
+    find_cmd = [
+        "find",
+        root_path,
+        "-type",
+        "f",
+        "-name",
+        "*.swift",
+        "-o",
+        "-name",
+        "*.m",
+    ]
 
     log.debug(f"Running find command: {find_cmd}")
 

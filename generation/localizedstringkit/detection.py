@@ -126,7 +126,8 @@ class Detector:
             for i in range(len(found_match) - 1):
                 match.append(
                     found_match[i].replace(
-                        Detector.TEMPORARY_ESCAPE_SEQUENCE, Detector.QUOTE_ESCAPE_SEQUENCE
+                        Detector.TEMPORARY_ESCAPE_SEQUENCE,
+                        Detector.QUOTE_ESCAPE_SEQUENCE,
                     ),
                 )
 

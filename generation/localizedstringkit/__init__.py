@@ -142,7 +142,10 @@ def create_or_merge_stringsdict_file(
 
 
 def generate_files(
-    *, code_files: List[str], localized_string_kit_path: str, generate_stringsdict_files: bool
+    *,
+    code_files: List[str],
+    localized_string_kit_path: str,
+    generate_stringsdict_files: bool,
 ) -> None:
     """Run the localization substitution process.
 
@@ -280,7 +283,10 @@ def has_strings_dict_changes(localized_string_kit_path: str, stringsdict_by_bund
 
 
 def has_changes(
-    *, localized_string_kit_path: str, code_files: List[str], including_stringsdict_files=False
+    *,
+    localized_string_kit_path: str,
+    code_files: List[str],
+    including_stringsdict_files=False,
 ) -> bool:
     """Check if there are outstanding LocalizedStringKit changes.
 

@@ -60,7 +60,11 @@ class BasicTestSuite(unittest.TestCase):
                 "comment": "This value contains some special tokens.",
                 "skip_value": True,
             },
-            {"text": "Another value", "comment": "Some comment", "bundle": "info.bundle"},
+            {
+                "text": "Another value",
+                "comment": "Some comment",
+                "bundle": "info.bundle",
+            },
             {
                 "text": "Another value",
                 "comment": "Some comment",
@@ -93,7 +97,6 @@ class BasicTestSuite(unittest.TestCase):
         # So we can't always determine the string Swift will have.
 
         for index, expectation in enumerate(expectation_list):
-
             text = expectation["text"]
             if "extension" in expectation:
                 text += ":" + expectation["extension"]
@@ -161,7 +164,10 @@ class BasicTestSuite(unittest.TestCase):
                 f"Mismatch in cases for {language_hint}, {generated_m_path} has different content then expected in {expectations_m_path}",
             )
 
-            for file_name in ["LocalizedStringKit.strings", "LocalizedStringKit.stringsdict"]:
+            for file_name in [
+                "LocalizedStringKit.strings",
+                "LocalizedStringKit.stringsdict",
+            ]:
                 generated_file_path = os.path.join(generated_bundle_path, "en.lproj", file_name)
                 expectations_file_path = os.path.join(
                     expectations_bundle_path, "en.lproj", file_name

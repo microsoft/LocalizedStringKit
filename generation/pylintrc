@@ -25,10 +25,11 @@ max-complexity=12
 # C1801 len-as-condition: Do not use `len(SEQUENCE)` as condition value
 # W0511 fixme: TODO statements
 # W0703 broad-except: Catching too general exception "Exception"
+# W0719 broad-exception-raised: Raising too general exception
 # W1201 logging-not-lazy: Specify string format arguments as logging function parameters
 # W1202 logging-format-interpolation: Use % formatting in logging functions and pass the % parameters as arguments
 # W1203 logging-fstring-interpolation: Use % formatting in logging functions and pass the % parameters as arguments
-disable=C0413,C1801,W0511,W0703,W1201,W1202,W1203
+disable=C0413,C1801,W0511,W0703,W0719,W1201,W1202,W1203
 
 [REPORTS]
 
