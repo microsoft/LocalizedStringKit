@@ -64,7 +64,9 @@ class Detector:
 
         for match in sanitized_matches:
             if len(match) != expected_match_count:
-                raise Exception("Found match with invalid number of capture groups: " + str(match))
+                raise Exception(
+                    "Found match with invalid number of capture groups: " + str(match)
+                )
 
             result: Tuple = match + (pattern,)
             matches_in_buffer.append(result)
@@ -126,7 +128,8 @@ class Detector:
             for i in range(len(found_match) - 1):
                 match.append(
                     found_match[i].replace(
-                        Detector.TEMPORARY_ESCAPE_SEQUENCE, Detector.QUOTE_ESCAPE_SEQUENCE
+                        Detector.TEMPORARY_ESCAPE_SEQUENCE,
+                        Detector.QUOTE_ESCAPE_SEQUENCE,
                     ),
                 )
 

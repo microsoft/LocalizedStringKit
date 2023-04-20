@@ -25,7 +25,9 @@ from localizedstringkit.files import localizable_files
 log = logger.get()
 
 
-def get_strings(code_files: List[str], generate_stringsdict_entires: bool) -> Tuple[dict, dict]:
+def get_strings(
+    code_files: List[str], generate_stringsdict_entires: bool
+) -> Tuple[dict, dict]:
     """Scan and get strings per bundle.
 
     :param code_files: The list of file paths to generate the code strings for
@@ -37,7 +39,9 @@ def get_strings(code_files: List[str], generate_stringsdict_entires: bool) -> Tu
     # Get & dedupe localized strings
     localized_strings = detection.strings_in_code_files(code_files)
     localized_strings = list(set(localized_strings))
-    localized_strings.sort(key=lambda string: (string.key, string.key_extension, string.comment))
+    localized_strings.sort(
+        key=lambda string: (string.key, string.key_extension, string.comment)
+    )
 
     stringsdict_pattern = re.compile(r"%#@(.*?)@")
 
@@ -126,7 +130,9 @@ def create_or_merge_stringsdict_file(
             None,
         )
         if existing_entry is not None:
-            sorted_variables_for_existing_entry = sorted(existing_entry.variables.keys())
+            sorted_variables_for_existing_entry = sorted(
+                existing_entry.variables.keys()
+            )
             sorted_variables_for_entry = sorted(entry.variables.keys())
 
             if existing_entry.value != entry.value:
@@ -142,7 +148,10 @@ def create_or_merge_stringsdict_file(
 
 
 def generate_files(
-    *, code_files: List[str], localized_string_kit_path: str, generate_stringsdict_files: bool
+    *,
+    code_files: List[str],
+    localized_string_kit_path: str,
+    generate_stringsdict_files: bool,
 ) -> None:
     """Run the localization substitution process.
 
@@ -157,7 +166,9 @@ def generate_files(
     """
 
     if generate_stringsdict_files:
-        log.info("Generating LocalizedStringKit.strings and LocalizedStringKit.stringsdict...")
+        log.info(
+            "Generating LocalizedStringKit.strings and LocalizedStringKit.stringsdict..."
+        )
     else:
         log.info("Generating LocalizedStringKit.strings...")
 
@@ -208,7 +219,9 @@ def generate_files(
     log.info("Generation complete")
 
 
-def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_path: str) -> None:
+def generate_dot_strings_files(
+    *, code_files: List[str], localized_string_kit_path: str
+) -> None:
     """Run the localization substitution process only creating .strings files.
 
     :param List[str] code_files: The list of file paths to generate the .strings
@@ -227,7 +240,9 @@ def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_pa
     )
 
 
-def has_strings_dict_changes(localized_string_kit_path: str, stringsdict_by_bundle: dict) -> bool:
+def has_strings_dict_changes(
+    localized_string_kit_path: str, stringsdict_by_bundle: dict
+) -> bool:
     """Check if there are outstanding LocalizedStringKit changes in stringsdict.
 
     :param str localized_string_kit_path: Path to the LocalizedStringsKit
@@ -280,7 +295,10 @@ def has_strings_dict_changes(localized_string_kit_path: str, stringsdict_by_bund
 
 
 def has_changes(
-    *, localized_string_kit_path: str, code_files: List[str], including_stringsdict_files=False
+    *,
+    localized_string_kit_path: str,
+    code_files: List[str],
+    including_stringsdict_files=False,
 ) -> bool:
     """Check if there are outstanding LocalizedStringKit changes.
 

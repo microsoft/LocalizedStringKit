@@ -9,7 +9,9 @@ import sys
 try:
     import localizedstringkit
 except ImportError:
-    sys.path.insert(0, os.path.abspath(os.path.join(os.path.abspath(__file__), "..", "..")))
+    sys.path.insert(
+        0, os.path.abspath(os.path.join(os.path.abspath(__file__), "..", ".."))
+    )
     import localizedstringkit
 
 log = localizedstringkit.logger.get()
