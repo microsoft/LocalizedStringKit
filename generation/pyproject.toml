@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "localizedstringkit"
-version = "0.2.1"
+version = "0.2.2"
 description = "Generate .strings files directly from your code"
 authors = ["Dale Myers <dalemy@microsoft.com>"]
 license = "MIT"
@@ -34,11 +34,11 @@ dotstrings = "^1.1.3"
 deserialize = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
-black = "^23.3.0"
-mypy = "^1.2.0"
-pylint = "^2.17.2"
-pytest = "^7.3.1"
-pytest-cov = "^4.0.0"
+black = "^23.7.0"
+mypy = "^1.4.1"
+pylint = "^2.17.5"
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
 
 [[tool.mypy.overrides]]
 module = [
