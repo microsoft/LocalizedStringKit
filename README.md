@@ -1,7 +1,5 @@
 # LocalizedStringKit
 
-[![PyPi Version](https://img.shields.io/pypi/v/LocalizedStringKit.svg)](https://pypi.org/project/LocalizedStringKit/)
-[![License](https://img.shields.io/pypi/l/LocalizedStringKit.svg)](https://github.com/Microsoft/LocalizedStringKit/blob/master/LICENSE)
 ![LocalizedStringKit Logo](https://raw.githubusercontent.com/microsoft/localizedStringKit/master/logo.png)
 
 LocalizedStringKit is a tool that lets you write English strings directly into your source code and generate the required .strings files later. No more manually managing string keys or remembering to add them to the strings file later. All you do is change: 
