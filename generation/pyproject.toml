@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "localizedstringkit"
-version = "0.2.7"
+version = "0.2.6"
 description = "Generate .strings files directly from your code"
 authors = ["Dale Myers <dalemy@microsoft.com>"]
 license = "MIT"
