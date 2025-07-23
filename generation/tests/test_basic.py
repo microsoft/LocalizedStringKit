@@ -209,3 +209,44 @@ class BasicTestSuite(unittest.TestCase):
             os.path.join(self.data_path, "objc", "expectation"),
             "ObjC",
         )
+
+    def test_swift_raw_strings_detection(self) -> None:
+        """Test that Swift raw string literals are detected correctly."""
+        detected_strings = localizedstringkit.detection.strings_in_code_file(
+            os.path.join(self.data_path, "swift", "raw_strings_sample.swift")
+        )
+
+        # Expected raw string test cases
+        expected_values = [
+            'Raw string value with "quotes"',      # Raw string in value
+            'Regular value',                       # Regular string in value  
+            'Raw value with "quotes"',            # Both raw strings
+            'Raw value with #"nested"# quotes',   # Multi-hash raw string
+            'Path: C:\\Program Files\\App',        # Raw string with backslashes
+            'Pattern: \\d{3}-\\d{3}-\\d{4}',      # Raw string with regex
+            'Raw value',                          # LocalizedWithKeyExtension
+            'Raw value',                          # LocalizedWithBundle
+            'Raw value',                          # LocalizedWithKeyExtensionAndBundle
+            'Regular value',                      # Mixed raw/regular in different positions
+        ]
+
+        expected_comments = [
+            'Regular comment',                    # Regular string in comment
+            'Raw comment with "quotes"',         # Raw string in comment
+            'Raw comment with "quotes"',         # Both raw strings
+            'Regular comment',                   # Multi-hash raw string
+            'Windows path example',              # Raw string with backslashes
+            'Phone number regex',                # Raw string with regex
+            'Comment',                           # LocalizedWithKeyExtension
+            'Comment',                           # LocalizedWithBundle
+            'Comment',                           # LocalizedWithKeyExtensionAndBundle
+            'Raw comment',                       # Mixed raw/regular in different positions
+        ]
+
+        self.assertEqual(len(detected_strings), len(expected_values))
+
+        # Verify each detected string matches expectations
+        for i, (detected, expected_value, expected_comment) in enumerate(zip(detected_strings, expected_values, expected_comments)):
+            with self.subTest(i=i):
+                self.assertEqual(detected.value, expected_value, f"Value mismatch at index {i}")
+                self.assertEqual(detected.comment, expected_comment, f"Comment mismatch at index {i}")
