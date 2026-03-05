@@ -74,6 +74,20 @@ class Detector:
         """
         raise NotImplementedError()
 
+    def restore_quotes(self, text) -> Optional[str]:
+        """Restore original quotes in the text by replacing the temporary escape sequence.
+
+        :param text: The text to restore quotes in
+
+        :returns: The text with quotes restored, or None if input is None
+        """
+        if text is None:
+            return None
+        return text.replace(
+            Detector.TEMPORARY_ESCAPE_SEQUENCE,
+            Detector.QUOTE_ESCAPE_SEQUENCE,
+        )
+
     def _detect_strings(self, combined_pattern: Pattern) -> List[LocalizedString]:
         """Find all matching localized calls using a combined pattern with named groups.
 
@@ -95,42 +109,27 @@ class Detector:
         for match in combined_pattern.finditer(self.sanitized_contents):
             groupdict = match.groupdict()
 
-            # Check if this is an invalid call
             if groupdict.get("invalid"):
-                # Skip function definitions (check the line for 'func ' or 'def ')
+                # Skip function definitions (check the line for 'func')
                 line_start = self.sanitized_contents.rfind("\n", 0, match.start()) + 1
                 line_end = self.sanitized_contents.find("\n", match.start())
                 if line_end == -1:
                     line_end = len(self.sanitized_contents)
                 line = self.sanitized_contents[line_start:line_end].strip()
 
-                if not (line.startswith("func ") or line.startswith("def ")):
-                    # This is a real invalid call, not a function definition
-                    snippet = groupdict["invalid"]
-                    invalid_calls.append(snippet)
-                continue
-
-            # Helper to restore escaped quotes
-            def restore_quotes(text):
-                if text is None:
-                    return None
-                return text.replace(
-                    Detector.TEMPORARY_ESCAPE_SEQUENCE,
-                    Detector.QUOTE_ESCAPE_SEQUENCE,
-                )
-
-            # Process valid calls by checking which named groups are not None
-            if groupdict.get("ext_bundle_value") is not None:
+                if not line.startswith("func "):
+                    invalid_calls.append(groupdict["invalid"])
+            elif groupdict.get("ext_bundle_value") is not None:
                 # LocalizedWithKeyExtensionAndBundle - 4 params
                 results.append(
                     LocalizedString(
                         key=None,
-                        value=restore_quotes(groupdict["ext_bundle_value"]),
+                        value=self.restore_quotes(groupdict["ext_bundle_value"]),
                         language="en",
                         table="LocalizedStringKit",
-                        comment=restore_quotes(groupdict["ext_bundle_comment"]),
-                        key_extension=restore_quotes(groupdict["ext_bundle_extension"]),
-                        bundle=restore_quotes(groupdict["ext_bundle_bundle"]),
+                        comment=self.restore_quotes(groupdict["ext_bundle_comment"]),
+                        key_extension=self.restore_quotes(groupdict["ext_bundle_extension"]),
+                        bundle=self.restore_quotes(groupdict["ext_bundle_bundle"]),
                     )
                 )
             elif groupdict.get("bundle_value") is not None:
@@ -138,12 +137,12 @@ class Detector:
                 results.append(
                     LocalizedString(
                         key=None,
-                        value=restore_quotes(groupdict["bundle_value"]),
+                        value=self.restore_quotes(groupdict["bundle_value"]),
                         language="en",
                         table="LocalizedStringKit",
-                        comment=restore_quotes(groupdict["bundle_comment"]),
+                        comment=self.restore_quotes(groupdict["bundle_comment"]),
                         key_extension=None,
-                        bundle=restore_quotes(groupdict["bundle_bundle"]),
+                        bundle=self.restore_quotes(groupdict["bundle_bundle"]),
                     )
                 )
             elif groupdict.get("ext_value") is not None:
@@ -151,11 +150,11 @@ class Detector:
                 results.append(
                     LocalizedString(
                         key=None,
-                        value=restore_quotes(groupdict["ext_value"]),
+                        value=self.restore_quotes(groupdict["ext_value"]),
                         language="en",
                         table="LocalizedStringKit",
-                        comment=restore_quotes(groupdict["ext_comment"]),
-                        key_extension=restore_quotes(groupdict["ext_extension"]),
+                        comment=self.restore_quotes(groupdict["ext_comment"]),
+                        key_extension=self.restore_quotes(groupdict["ext_extension"]),
                         bundle="LocalizedStringKit.bundle",
                     )
                 )
@@ -164,10 +163,10 @@ class Detector:
                 results.append(
                     LocalizedString(
                         key=None,
-                        value=restore_quotes(groupdict["basic_value"]),
+                        value=self.restore_quotes(groupdict["basic_value"]),
                         language="en",
                         table="LocalizedStringKit",
-                        comment=restore_quotes(groupdict["basic_comment"]),
+                        comment=self.restore_quotes(groupdict["basic_comment"]),
                         key_extension=None,
                         bundle="LocalizedStringKit.bundle",
                     )
