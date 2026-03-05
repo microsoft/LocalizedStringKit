@@ -52,6 +52,7 @@ def localizable_files(
                                               set.
 
     :raises ValueError: If neither excluded_folders nor exclusion_file_path is set.
+    :raise CalledProcessError: If the find command fails.
 
     :returns: The list of files which should be processed
     """

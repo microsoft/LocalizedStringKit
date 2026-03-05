@@ -74,7 +74,7 @@ class Detector:
         """
         raise NotImplementedError()
 
-    def restore_quotes(self, text) -> Optional[str]:
+    def restore_quotes(self, text: str) -> Optional[str]:
         """Restore original quotes in the text by replacing the temporary escape sequence.
 
         :param text: The text to restore quotes in
@@ -243,8 +243,8 @@ def _process_single_file(file_path: str) -> List[LocalizedString]:
     """
     try:
         return strings_in_code_file(file_path)
-    except (IOError, OSError, InvalidLocalizedCallException, UnsupportedFileTypeError) as e:
-        log.error("Error processing %s: %s", file_path, e)
+    except (IOError, InvalidLocalizedCallException, UnsupportedFileTypeError) as exception:
+        log.error("Error processing %s: %s", file_path, exception)
         return []
 
 
@@ -260,17 +260,15 @@ def strings_in_code_files(
     :returns: The list of localized strings from the codebase
     """
 
+    strings: List[LocalizedString] = []
+
     # For small number of files, sequential is faster due to no overhead
     if len(code_files) <= 100 or not parallel:
-        strings: List[LocalizedString] = []
         for file_path in code_files:
             strings += strings_in_code_file(file_path)
         return strings
 
     # Parallel processing for larger file sets
-    strings: List[LocalizedString] = []
-
-    # Use ProcessPoolExecutor for true parallelism (bypasses GIL)
     with ProcessPoolExecutor(max_workers=max_workers) as executor:
         # Submit all files for processing
         future_to_file = {
@@ -283,7 +281,7 @@ def strings_in_code_files(
             try:
                 file_strings = future.result()
                 strings += file_strings
-            except (IOError, OSError, InvalidLocalizedCallException, UnsupportedFileTypeError) as e:
-                log.error("Error processing %s: %s", file_path, e)
+            except (IOError, InvalidLocalizedCallException, UnsupportedFileTypeError) as exception:
+                log.error("Error processing %s: %s", file_path, exception)
 
     return strings
