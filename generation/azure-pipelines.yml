@@ -1,102 +1,100 @@
-
 jobs:
+  - job: "Build_and_Test_Library"
+    displayName: "Build and Test iOS Library"
+    pool: "Hosted macOS"
 
-    - job: 'Build_and_Test_Library'
-      displayName: "Build and Test iOS Library"
-      pool: 'Hosted macOS'
-    
-      steps:
-
+    steps:
       - script: |
           ls -al /Applications/Xcode*
           printenv
-        displayName: 'Environment'
+        displayName: "Environment"
 
       - task: Xcode@5
-        displayName: 'Build'
+        displayName: "Build"
         inputs:
-          configuration: 'Release'
-          sdk: 'iphoneos13.2'
-          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit.xcodeproj'
-          scheme: 'LocalizedStringKit'
+          configuration: "Release"
+          sdk: "iphoneos13.2"
+          xcWorkspacePath: "$(System.DefaultWorkingDirectory)/LocalizedStringKit.xcodeproj"
+          scheme: "LocalizedStringKit"
           xcodeVersion: specifyPath
           xcodeDeveloperDir: /Applications/Xcode_11.3.1.app
 
       - task: Xcode@5
-        displayName: 'Test'
+        displayName: "Test"
         inputs:
           actions: test
-          configuration: 'Debug'
-          sdk: 'iphoneos13.2'
-          xcWorkspacePath: '$(System.DefaultWorkingDirectory)/LocalizedStringKit.xcodeproj'
-          scheme: 'LocalizedStringKitTests'
+          configuration: "Debug"
+          sdk: "iphoneos13.2"
+          xcWorkspacePath: "$(System.DefaultWorkingDirectory)/LocalizedStringKit.xcodeproj"
+          scheme: "LocalizedStringKitTests"
           xcodeVersion: specifyPath
           xcodeDeveloperDir: /Applications/Xcode_11.3.1.app
           signingOption: default
           destinationPlatformOption: iOS
           publishJUnitResults: true
-          destinationSimulators: 'iPhone 11'
+          destinationSimulators: "iPhone 11"
 
+  - job: "Build_and_Test_Tool"
+    displayName: "Build and Test Generation Tool"
+    pool: "Hosted macOS"
+    strategy:
+      matrix:
+        Python311:
+          python.version: "3.11"
+        Python312:
+          python.version: "3.12"
+      maxParallel: 2
 
-    - job: 'Build_and_Test_Tool'
-      displayName: "Build and Test Generation Tool"
-      pool: 'Hosted macOS'
-      strategy:
-        matrix:
-          Python38:
-            python.version: '3.8'
-        maxParallel: 4
-    
-      steps:
+    steps:
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: '$(python.version)'
-          architecture: 'x64'
-    
-      - script: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-        displayName: Install Poetry
+          versionSpec: "$(python.version)"
+          architecture: "x64"
+
+      - script: curl -sSL https://install.python-poetry.org | python3
+        displayName: "Install Poetry"
 
       - script: python -m venv $(System.DefaultWorkingDirectory)
-        displayName: Create virtual environment
+        displayName: "Create virtual environment"
 
       - script: |
           source bin/activate
           cd generation
           $HOME/.local/bin/poetry install
-        displayName: 'Install dependencies'
-    
+        displayName: "Install dependencies"
+
       - script: |
           source bin/activate
           cd generation
           python -m black -l 100 --check localizedstringkit/*.py tests/*.py
-        displayName: 'Format Check (Black)'
-    
+        displayName: "Format Check (Black)"
+
       - script: |
           source bin/activate
           cd generation
           python -m pylint --rcfile=pylintrc localizedstringkit tests
-        displayName: 'Lint'
-    
+        displayName: "Lint"
+
       - script: |
           source bin/activate
           cd generation
           python -m mypy --ignore-missing-imports localizedstringkit/ tests/
-        displayName: 'Type Check'
-    
+        displayName: "Type Check"
+
       - script: |
           source bin/activate
           cd generation
           python -m pytest tests --cov=localizedstringkit --cov-report xml --doctest-modules --junitxml=junit/test-results.xml
-        displayName: 'pytest'
-    
+        displayName: "pytest"
+
       - task: PublishTestResults@2
         inputs:
-          testResultsFiles: '**/test-results.xml'
-          testRunTitle: 'Python $(python.version)'
+          testResultsFiles: "**/test-results.xml"
+          testRunTitle: "Python $(python.version)"
         condition: succeededOrFailed()
-    
+
       # Publish Code Coverage Results
       - task: PublishCodeCoverageResults@1
         inputs:
-          codeCoverageTool: 'cobertura'
+          codeCoverageTool: "cobertura"
           summaryFileLocation: $(System.DefaultWorkingDirectory)/generation/coverage.xml
