@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LocalizedStringKit'
-  s.version          = '0.2.5'
+  s.version          = '0.2.6'
   s.summary          = 'Generate .strings files directly from your code'
 
   s.description      = <<-DESC
