@@ -11,10 +11,10 @@ from collections import defaultdict
 
 from typing import Any, List, Optional, Tuple
 
-from dotstrings.genstrings import generate_strings
 from dotstrings import stringsdict_file_path
 from dotstrings import DotStringsDictEntry, Variable
 from dotstrings import load_dict
+from dotstrings.dot_strings_entry import DotStringsEntry
 
 from localizedstringkit import detection
 from localizedstringkit import logger
@@ -164,36 +164,32 @@ def generate_files(
     else:
         log.info("Generating LocalizedStringKit.strings...")
 
-    code_strings_file: Optional[dict] = None
-
-    # Generate a .m file per unique bundle with all NSLocalizedStrings in it if we haven't
-    # been given files explicitly
-    code_strings_file, stringsdict_by_bundle = generate_code_strings_file(
+    # Extract strings from code files
+    normal_strings_by_bundle, stringsdict_by_bundle = get_strings(
         code_files, generate_stringsdict_files
     )
 
-    # Iterate through output_paths dictionary and generate strings for each bundle
-    for bundle_name, path in code_strings_file.items():
-        # Generate strings
+    # Write .strings files directly for each bundle
+    for bundle_name, strings in normal_strings_by_bundle.items():
         name = bundle_name
         if ".bundle" not in name:
             name = bundle_name + ".bundle"
 
-        generate_strings(
+        # Write .strings file directly from LocalizedString objects
+        _write_strings_file(
             output_directory=os.path.join(localized_string_kit_path, name),
-            file_paths=[path],
+            strings=strings,
         )
 
         # We need to track the code file as well so that we can tell if things
         # have changed or not between successive runs
         m_file_name = name.replace(".bundle", ".m")
         source_code_file_path = os.path.join(localized_string_kit_path, m_file_name)
-
-        # Update the code strings file
-        if os.path.exists(source_code_file_path):
-            os.remove(source_code_file_path)
-
-        shutil.move(path, source_code_file_path)
+        # Write the temporary .m file with NSLocalizedString calls for tracking
+        with open(source_code_file_path, "w", encoding="utf-8") as temporary_source_file:
+            for localized_string in strings:
+                temporary_source_file.write(localized_string.ns_localized_format())
+                temporary_source_file.write("\n")
 
     for bundle_name, stringsdict_entries in stringsdict_by_bundle.items():
         name = bundle_name
@@ -209,6 +205,63 @@ def generate_files(
 
     # Success
     log.info("Generation complete")
+
+
+def _write_strings_file(output_directory: str, strings: List[Any]) -> None:
+    """Write a .strings file directly from LocalizedString objects.
+
+    :param str output_directory: The directory to write the .strings file to (will contain en.lproj)
+    :param List[LocalizedString] strings: The list of LocalizedString objects to write
+
+    :raises Exception: If we can't write the .strings file
+    """
+    # Create output directory
+    english_strings_directory = os.path.join(output_directory, "en.lproj")
+    os.makedirs(english_strings_directory, exist_ok=True)
+
+    # Group strings by table
+    strings_by_table = defaultdict(list)
+    for localized_string in strings:
+        strings_by_table[localized_string.table].append(localized_string)
+
+    # Write each table to its own .strings file
+    for table, table_strings in strings_by_table.items():
+        output_path = os.path.join(english_strings_directory, f"{table}.strings")
+
+        # Deduplicate by key and merge comments
+        # Use a dictionary to track entries by key
+        entries_by_key = {}
+        for localized_string in table_strings:
+            key = localized_string.key
+
+            if key not in entries_by_key:
+                # First occurrence of this key
+                comments = []
+                if localized_string.comment:
+                    comments = [localized_string.comment]
+
+                entries_by_key[key] = DotStringsEntry(
+                    key=key,
+                    value=localized_string.value,
+                    comments=comments,
+                )
+            else:
+                # Key already exists, merge comments
+                existing_entry = entries_by_key[key]
+                if (
+                    localized_string.comment
+                    and localized_string.comment not in existing_entry.comments
+                ):
+                    existing_entry.comments.append(localized_string.comment)
+
+        # Write to file in sorted order by key
+        with open(output_path, "w", encoding="utf-8") as strings_file:
+            for key in sorted(entries_by_key.keys()):
+                entry = entries_by_key[key]
+                # Sort comments alphabetically
+                entry.comments.sort()
+                strings_file.write(entry.strings_format())
+                strings_file.write("\n\n")
 
 
 def generate_dot_strings_files(*, code_files: List[str], localized_string_kit_path: str) -> None:
