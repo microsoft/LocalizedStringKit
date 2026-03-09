@@ -259,7 +259,7 @@ def _write_strings_file(output_directory: str, strings: List[Any]) -> None:
             for key in sorted(entries_by_key.keys()):
                 entry = entries_by_key[key]
                 # Sort comments alphabetically
-                entry.comments.sort()
+                entry.comments.sort(key=str.lower)
                 strings_file.write(entry.strings_format())
                 strings_file.write("\n\n")
 
