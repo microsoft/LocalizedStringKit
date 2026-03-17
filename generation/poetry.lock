@@ -187,14 +187,14 @@ graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
 name = "dotstrings"
-version = "1.1.3"
+version = "3.1.4"
 description = "Tools for dealing with the .strings files for iOS and macOS"
 optional = false
-python-versions = ">=3.7.2,<4.0.0"
+python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "dotstrings-1.1.3-py3-none-any.whl", hash = "sha256:dca3c3aeb020246d0b1fd9117fc410954f8bfc8b19fed4fc81e77e20529c8920"},
-    {file = "dotstrings-1.1.3.tar.gz", hash = "sha256:23c9e35181133fe631cadb90db6021c01e6216caa536f2dbdb82bbfe1845a9e2"},
+    {file = "dotstrings-3.1.4-py3-none-any.whl", hash = "sha256:527fd6211a0063c2a752f2f7146be6ba5b55d73ce5ddfe402414c96896b565f9"},
+    {file = "dotstrings-3.1.4.tar.gz", hash = "sha256:24ea787b4e04a5c444bb2ab2b04817ff234e9cf99713e9e25649c7bfcc698a81"},
 ]
 
 [[package]]
@@ -448,4 +448,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "472a935872dda18b4151f5d526d3c3bb08d58d0f2c8eee2f6ef09ecf0ae93203"
+content-hash = "1e498240adf71842adf0944db9567ee49615903fabfa7eff0f0e47ec2dd8fe34"
