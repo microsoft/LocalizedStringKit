@@ -35,7 +35,7 @@ deserialize = "^2.0.1"
 black = "^24.3.0"
 mypy = "^1.4.1"
 pylint = "^3.3.0"
-pytest = "^7.4.0"
+pytest = ">=7.4,<10.0"
 pytest-cov = "^4.1.0"
 
 [[tool.mypy.overrides]]
