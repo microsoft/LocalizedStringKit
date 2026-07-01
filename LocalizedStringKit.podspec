@@ -16,5 +16,14 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.0']
 
-  s.source_files = 'Sources/LocalizedStringKit/**/*.swift'
+  # The runtime is implemented in Swift with a thin Objective-C facade that
+  # provides the historical `Localized(...)` free functions. CocoaPods builds
+  # both languages into a single mixed module, so the facade reaches the Swift
+  # implementation through the generated `-Swift.h` header (see LSK_MIXED_MODULE).
+  s.source_files = 'Sources/LocalizedStringKit/**/*.{h,m}', 'Sources/LocalizedStringKitCore/**/*.swift'
+  s.public_header_files = 'Sources/LocalizedStringKit/include/**/*.h'
+
+  s.pod_target_xcconfig = {
+    'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) LSK_MIXED_MODULE=1'
+  }
 end

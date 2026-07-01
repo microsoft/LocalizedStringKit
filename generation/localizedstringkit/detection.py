@@ -27,18 +27,16 @@ _SWIFT_COMBINED_PATTERN: Pattern = re.compile(
 )
 
 # Objective-C combined pattern - matches both VALID and INVALID calls
-# Valid calls populate named groups, invalid calls populate the 'invalid' group.
-# Objective-C consumers call the `@objc LSKLocalizer` class, e.g.
-# `[LSKLocalizer localized:@"value" comment:@"comment"]`.
+# Valid calls populate named groups, invalid calls populate the 'invalid' group
 _OBJC_COMBINED_PATTERN: Pattern = re.compile(
     r"(?:"
     # Valid patterns with named groups
-    r'\[\s*LSKLocalizer\s+localized:\s*@"(?P<ext_bundle_value>.+?)"\s+comment:\s*@"(?P<ext_bundle_comment>.*?)"\s+keyExtension:\s*@"(?P<ext_bundle_extension>.*?)"\s+bundleName:\s*@"(?P<ext_bundle_bundle>.*?)"\s*\]|'
-    r'\[\s*LSKLocalizer\s+localized:\s*@"(?P<bundle_value>.+?)"\s+comment:\s*@"(?P<bundle_comment>.*?)"\s+bundleName:\s*@"(?P<bundle_bundle>.*?)"\s*\]|'
-    r'\[\s*LSKLocalizer\s+localized:\s*@"(?P<ext_value>.+?)"\s+comment:\s*@"(?P<ext_comment>.*?)"\s+keyExtension:\s*@"(?P<ext_extension>.*?)"\s*\]|'
-    r'\[\s*LSKLocalizer\s+localized:\s*@"(?P<basic_value>.+?)"\s+comment:\s*@"(?P<basic_comment>.*?)"\s*\]|'
-    # Invalid pattern - catch any LSKLocalizer localized: call that doesn't match above
-    r"(?P<invalid>\[\s*LSKLocalizer\s+localized:[^\]]+\])"
+    r'LocalizedWithKeyExtensionAndBundle\(\s*@"(?P<ext_bundle_value>.+?)",\s*@"(?P<ext_bundle_comment>.*?)",\s*@"(?P<ext_bundle_extension>.*?)",\s*@"(?P<ext_bundle_bundle>.*?)"\s*\)|'
+    r'LocalizedWithBundle\(\s*@"(?P<bundle_value>.+?)",\s*@"(?P<bundle_comment>.*?)",\s*@"(?P<bundle_bundle>.*?)"\s*\)|'
+    r'LocalizedWithKeyExtension\(\s*@"(?P<ext_value>.+?)",\s*@"(?P<ext_comment>.*?)",\s*@"(?P<ext_extension>.*?)"\s*\)|'
+    r'Localized\(\s*@"(?P<basic_value>.+?)",\s*@"(?P<basic_comment>.*?)"\s*\)|'
+    # Invalid pattern - catch any Localized call that doesn't match above
+    r"(?P<invalid>Localized(?:WithKeyExtension|WithBundle|WithKeyExtensionAndBundle)?\([^)]+\))"
     r")"
 )
 

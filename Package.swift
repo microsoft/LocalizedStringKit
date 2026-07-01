@@ -17,9 +17,16 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
+        // The Swift implementation.
+        .target(
+            name: "LocalizedStringKitCore",
+            dependencies: []),
+        // The public, historically-compatible Objective-C facade. It exposes
+        // the `Localized(...)` family of C free functions (usable from both
+        // Objective-C and Swift) and forwards to the Swift implementation.
         .target(
             name: "LocalizedStringKit",
-            dependencies: []),
+            dependencies: ["LocalizedStringKitCore"]),
         .testTarget(
             name: "LocalizedStringKitTests",
             dependencies: ["LocalizedStringKit"]),

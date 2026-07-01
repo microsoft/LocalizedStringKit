@@ -66,26 +66,27 @@ Remember to `import LocalizedStringKit` in the file too.
 
 #### Objective-C
 
-The library is written in Swift and exposes its Objective-C API through the
-`LSKLocalizer` class (the old free functions such as `Localized(...)` are Swift
-only). Import the module and call the class methods:
+The runtime is implemented in Swift, but the historical C free functions are
+preserved for Objective-C consumers (and behave identically to before). Import
+the module and call them exactly as you would from Swift:
 
 ```objc
 @import LocalizedStringKit;
 
-label.text = [LSKLocalizer localized:@"My new string" comment:@"A comment"];
+label.text = Localized(@"My new string", @"A comment");
 ```
 
 The other variants are available too:
 
 ```objc
-[LSKLocalizer localized:@"Value" comment:@"A comment" bundleName:@"info"];
-[LSKLocalizer localized:@"Archive" comment:@"Button title" keyExtension:@"Verb"];
-[LSKLocalizer localized:@"Archive" comment:@"Button title" keyExtension:@"Verb" bundleName:@"info"];
+LocalizedWithBundle(@"Value", @"A comment", @"info");
+LocalizedWithKeyExtension(@"Archive", @"Button title", @"Verb");
+LocalizedWithKeyExtensionAndBundle(@"Archive", @"Button title", @"Verb", @"info");
 ```
 
-The generation tool detects these `[LSKLocalizer localized:...]` calls in `.m`
-files, so remember to run the generator (below) after adding new strings.
+The generation tool detects these `Localized(...)` calls in `.m` files just as
+it does in Swift, so remember to run the generator (below) after adding new
+strings.
 
 ### Generate your strings
 
