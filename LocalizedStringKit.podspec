@@ -12,9 +12,9 @@ Pod::Spec.new do |s|
   s.author           = { 'Dale Myers' => 'dalemy@microsoft.com' }
   s.source           = { :git => 'https://github.com/microsoft/LocalizedStringKit.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '13.0'
 
-  s.source_files = 'Sources/LocalizedStringKit/**/*'
+  s.swift_versions = ['5.0']
 
-  s.public_header_files = 'Sources/LocalizedStringKit/include/**/*.h'
+  s.source_files = 'Sources/LocalizedStringKit/**/*.swift'
 end

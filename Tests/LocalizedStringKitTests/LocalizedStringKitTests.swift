@@ -94,8 +94,8 @@ final class LocalizedStringKitTests: XCTestCase {
 
   func testAlternateBundleSearchPath() {
     XCTAssertNil(LSKAlternateBundleSearchPath)
-    LSKAlternateBundleSearchPath = NSURL(string: "file://path")
-    XCTAssertEqual(LSKAlternateBundleSearchPath, NSURL(string: "file://path"))
+    LSKAlternateBundleSearchPath = URL(string: "file://path")
+    XCTAssertEqual(LSKAlternateBundleSearchPath, URL(string: "file://path"))
   }
 
   // TODO: LocalizedStringKit statically binds the Locale bundle so we cannot swap locale at runtime, if we need to
