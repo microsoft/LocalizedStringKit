@@ -86,4 +86,15 @@ void LSKSetAlternateBundleSearchPath(NSURL *_Nonnull url);
 /// @param bundleName Name of bundle to search for
 NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName);
 
+/// Compute the localization key for a value (and optional key extension).
+///
+/// The key is the hex-encoded MD5 of the full UTF-8 value, or of
+/// `<value>:<keyExtension>` when a non-empty key extension is supplied. This is
+/// the exact key used for runtime lookups and must match the key produced by
+/// the generation tool.
+///
+/// @param value The English string
+/// @param keyExtension Optional key extension used to disambiguate homographs
+NSString *_Nonnull LSKKeyForValue(NSString *_Nonnull value, NSString *_Nullable keyExtension);
+
 NS_ASSUME_NONNULL_END

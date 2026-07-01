@@ -1,3 +1,4 @@
+import CryptoKit
 import XCTest
 @testable import LocalizedStringKit
 
@@ -59,6 +60,32 @@ final class LocalizedStringKitTests: XCTestCase {
         XCTAssertNil(getLocalizedStringKitBundle("unknown_bundle"))
     }
 
+    /// Regression test for the runtime hash truncation bug. The runtime must
+    /// hash the *full* UTF-8 string, not just the first 8 bytes, so that the
+    /// key matches the one produced by the generation tool.
+    func testKeyForValueMatchesFullStringHash() {
+      // A value longer than 8 bytes. The pre-fix implementation truncated the
+      // hash input to the pointer size (8 bytes), producing the wrong key.
+      let value = "Terms and Conditions"
+      XCTAssertEqual(LSKKeyForValue(value, nil), Self.md5Hex(value))
+    }
+
+    /// Two values that share their first 8 bytes must produce different keys.
+    func testKeyForValueDistinguishesLongStringsSharingPrefix() {
+      let keyA = LSKKeyForValue("Settings screen", nil)
+      let keyB = LSKKeyForValue("Settings menu", nil)
+      XCTAssertNotEqual(keyA, keyB)
+    }
+
+    /// The key extension must be included in the hash input.
+    func testKeyForValueIncludesKeyExtension() {
+      let base = LSKKeyForValue("Schedule", nil)
+      let noun = LSKKeyForValue("Schedule", "Noun")
+      let verb = LSKKeyForValue("Schedule", "Verb")
+      XCTAssertNotEqual(base, noun)
+      XCTAssertNotEqual(noun, verb)
+    }
+
     func testPrimaryBundleName() {
       XCTAssertEqual(LSKPrimaryBundleName, "LocalizedStringKit.bundle")
       LSKSetPrimaryBundleName("Other.bundle")
@@ -88,4 +115,11 @@ final class LocalizedStringKitTests: XCTestCase {
     static var allTests = [
         ("testExample", testExample, testPrimaryBundleName, testAlternateBundleSearchPath),
     ]
+
+    /// Compute the hex-encoded MD5 of a string's UTF-8 bytes, matching the
+    /// generation tool's key algorithm.
+    static func md5Hex(_ string: String) -> String {
+      let digest = Insecure.MD5.hash(data: Data(string.utf8))
+      return digest.map { String(format: "%02x", $0) }.joined()
+    }
 }
