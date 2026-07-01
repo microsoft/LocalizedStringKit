@@ -64,6 +64,29 @@ label.text = Localized("My new string", "A comment")
 
 Remember to `import LocalizedStringKit` in the file too.
 
+#### Objective-C
+
+The library is written in Swift and exposes its Objective-C API through the
+`LSKLocalizer` class (the old free functions such as `Localized(...)` are Swift
+only). Import the module and call the class methods:
+
+```objc
+@import LocalizedStringKit;
+
+label.text = [LSKLocalizer localized:@"My new string" comment:@"A comment"];
+```
+
+The other variants are available too:
+
+```objc
+[LSKLocalizer localized:@"Value" comment:@"A comment" bundleName:@"info"];
+[LSKLocalizer localized:@"Archive" comment:@"Button title" keyExtension:@"Verb"];
+[LSKLocalizer localized:@"Archive" comment:@"Button title" keyExtension:@"Verb" bundleName:@"info"];
+```
+
+The generation tool detects these `[LSKLocalizer localized:...]` calls in `.m`
+files, so remember to run the generator (below) after adding new strings.
+
 ### Generate your strings
 
 Now everything is in place to generate the `.strings` files. For this, you'll need the tool we use to generate the strings files. It is a Python tool and can be installed by running `pip install localizedstringkit`.

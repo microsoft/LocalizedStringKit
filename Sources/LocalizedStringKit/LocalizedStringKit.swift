@@ -325,6 +325,17 @@ public final class LSKLocalizer: NSObject {
         )
     }
 
+    /// Localize a string with a key extension. See
+    /// `LocalizedWithKeyExtension(_:_:_:)`.
+    @objc public class func localized(_ value: String, comment: String, keyExtension: String?) -> String {
+        LocalizedStringKitCore.shared.localize(
+            value: value,
+            comment: comment,
+            keyExtension: keyExtension,
+            bundleName: nil
+        )
+    }
+
     /// Localize a string with a key extension and optional bundle.
     /// See `LocalizedWithKeyExtensionAndBundle(_:_:_:_:)`.
     @objc public class func localized(

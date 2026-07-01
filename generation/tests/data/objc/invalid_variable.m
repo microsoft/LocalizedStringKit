@@ -3,7 +3,7 @@
 
 - (void)testMethod {
     NSString *myVar = @"test";
-    NSString *invalid = Localized(myVar, @"Comment");
+    NSString *invalid = [LSKLocalizer localized:myVar comment:@"Comment"];
 }
 
 @end
