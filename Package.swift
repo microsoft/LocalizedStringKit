@@ -4,6 +4,12 @@ import PackageDescription
 
 let package = Package(
     name: "LocalizedStringKit",
+    platforms: [
+        .iOS(.v13),
+        .macOS(.v10_15),
+        .tvOS(.v13),
+        .watchOS(.v6),
+    ],
     products: [
         .library(
             name: "LocalizedStringKit",
@@ -11,9 +17,16 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
+        // The Swift implementation.
+        .target(
+            name: "LocalizedStringKitCore",
+            dependencies: []),
+        // The public, historically-compatible Objective-C facade. It exposes
+        // the `Localized(...)` family of C free functions (usable from both
+        // Objective-C and Swift) and forwards to the Swift implementation.
         .target(
             name: "LocalizedStringKit",
-            dependencies: []),
+            dependencies: ["LocalizedStringKitCore"]),
         .testTarget(
             name: "LocalizedStringKitTests",
             dependencies: ["LocalizedStringKit"]),

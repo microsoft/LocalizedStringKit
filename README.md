@@ -64,6 +64,30 @@ label.text = Localized("My new string", "A comment")
 
 Remember to `import LocalizedStringKit` in the file too.
 
+#### Objective-C
+
+The runtime is implemented in Swift, but the historical C free functions are
+preserved for Objective-C consumers (and behave identically to before). Import
+the module and call them exactly as you would from Swift:
+
+```objc
+@import LocalizedStringKit;
+
+label.text = Localized(@"My new string", @"A comment");
+```
+
+The other variants are available too:
+
+```objc
+LocalizedWithBundle(@"Value", @"A comment", @"info");
+LocalizedWithKeyExtension(@"Archive", @"Button title", @"Verb");
+LocalizedWithKeyExtensionAndBundle(@"Archive", @"Button title", @"Verb", @"info");
+```
+
+The generation tool detects these `Localized(...)` calls in `.m` files just as
+it does in Swift, so remember to run the generator (below) after adding new
+strings.
+
 ### Generate your strings
 
 Now everything is in place to generate the `.strings` files. For this, you'll need the tool we use to generate the strings files. It is a Python tool and can be installed by running `pip install localizedstringkit`.

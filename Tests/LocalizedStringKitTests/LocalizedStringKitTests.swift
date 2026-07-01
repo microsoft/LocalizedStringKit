@@ -1,6 +1,6 @@
 import CryptoKit
 import XCTest
-@testable import LocalizedStringKit
+import LocalizedStringKit
 
 final class LocalizedStringKitTests: XCTestCase {
 
