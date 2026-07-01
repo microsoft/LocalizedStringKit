@@ -3,6 +3,7 @@
 //
 
 @import CommonCrypto;
+#import <os/lock.h>
 
 #import "LocalizedStringKit.h"
 
@@ -13,6 +14,11 @@
 @implementation LocalizedStringKit
 
 static NSMutableDictionary *bundleMap = nil;
+
+// Guards all access to `bundleMap`. `dispatch_once` only guards initialization,
+// not the subsequent reads/mutations, so concurrent `Localized()` calls would
+// otherwise race on the dictionary.
+static os_unfair_lock bundleMapLock = OS_UNFAIR_LOCK_INIT;
 
 #pragma mark - Public
 
@@ -45,6 +51,10 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
   return [LocalizedStringKit getLocalizedStringKitBundle:bundleName];
 }
 
+NSString *_Nonnull LSKKeyForValue(NSString *_Nonnull value, NSString *_Nullable keyExtension) {
+  return [LocalizedStringKit keyWithValue:value keyExtension:keyExtension];
+}
+
 #pragma mark - Private / Static
 
 + (NSString *)localizeWithValue:(NSString *_Nonnull)value comment:(NSString *_Nonnull)comment keyExtension:(NSString *_Nullable)keyExtension bundleName:(NSString *_Nullable)bundleName
@@ -67,7 +77,11 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
     bundleName = LSKPrimaryBundleName;
   }
 
-  NSBundle *bundle = [bundleMap objectForKey:bundleName];
+  NSBundle *bundle = nil;
+
+  os_unfair_lock_lock(&bundleMapLock);
+
+  bundle = [bundleMap objectForKey:bundleName];
 
   if (bundle == nil)
   {
@@ -77,10 +91,13 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
     {
       [bundleMap setObject:[NSNull null] forKey:bundleName];
       // Unable to load `LocalizedStringKit` bundle
+      os_unfair_lock_unlock(&bundleMapLock);
       return value;
     }
     [bundleMap setObject:bundle forKey:bundleName];
   }
+
+  os_unfair_lock_unlock(&bundleMapLock);
 
   if ([bundle isKindOfClass:[NSNull class]]) {
     // Resolved NSNull for bundle
@@ -104,7 +121,11 @@ NSBundle * _Nullable getLocalizedStringKitBundle(NSString *_Nullable bundleName)
   const char *inputCharacterArray = [hashInput UTF8String];
   unsigned char outputCharacterArray[CC_MD5_DIGEST_LENGTH];
 
-  CC_MD5(inputCharacterArray, (CC_LONG)strnlen(inputCharacterArray, sizeof inputCharacterArray), outputCharacterArray);
+  // Hash the full UTF-8 byte length of the string. Note: `sizeof inputCharacterArray`
+  // is the size of the pointer (8 bytes on 64-bit), not the string length, so it must
+  // not be used to bound the hash input or the key would only cover the first 8 bytes.
+  // This must stay in sync with the generator, which hashes the full string.
+  CC_MD5(inputCharacterArray, (CC_LONG)[hashInput lengthOfBytesUsingEncoding:NSUTF8StringEncoding], outputCharacterArray);
 
   NSMutableString *key = [[NSMutableString alloc] init];
 
@@ -174,7 +195,9 @@ void LSKSetPrimaryBundleName(NSString *_Nonnull bundleName) {
 
 void LSKSetAlternateBundleSearchPath(NSURL *_Nonnull url) {
   LSKAlternateBundleSearchPath = url;
+  os_unfair_lock_lock(&bundleMapLock);
   [bundleMap removeAllObjects];
+  os_unfair_lock_unlock(&bundleMapLock);
 }
 
 @end
